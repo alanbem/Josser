@@ -1,0 +1,124 @@
+Josser - JSON-RPC client for PHP 5.3
+====================================
+
+JSON-RPC? What is it?
+---------------------
+
+JSON-RPC is a stateless, light-weight remote procedure call protocol encoded in JSON. It is a very simple
+protocol, defining only a handful of data types and commands.
+
+Which specification of JSON-RPC does Josser support?
+----------------------------------------------------
+
+Josser supports [JSON-RPC 1.0] (http://json-rpc.org/wiki/specification) and
+[revised JSON-RPC 2.0] (http://groups.google.com/group/json-rpc/web/json-rpc-2-0). Unfortunately only client-server
+connections are possible with Josser - albeit JSON-RPC 1.0 was designed as P2P - due to PHP limitations.
+
+It is worth to mention that Josser's architecture allows to plug your own JSON-RPC flavours or implement existing
+semi-standardized JSON-RPC protocols e.g. abandoned JSON-RPC 1.1WD.
+
+Transport mechanism
+-------------------
+
+As specification (both 1.0 and 2.0) states, JSON-RPC is transport agnostic. Josser sticks to that and allows to use
+http, sockets, tcp/ip or anything else your project requires (like post-it notes on a fridge :D).
+Currently only http transport is implemented.
+
+Documentation
+=============
+
+Usage
+-----
+
+Invoking remote methods is fairly simple:
+
+    use Josser\Client;
+    use Josser\Transport\HttpTransport;
+    use Josser\Protocol\JsonRpc1;
+    
+    $transport = new HttpTransport('http://user:password@your-service.com/math:8888'); // RPC over http
+    $protocol  = new JsonRpc1; // lets use JSON-RPC 1.0
+
+    // $protocol can be omitted - JSON-RPC 2.0 is used then by default.
+    $client = new Client($transport, $protocol);
+
+    // send a request
+    $sum = $client->request('sum', array(5, 4));
+
+    var_dump($sum); // int(9)
+
+If remote method does not return anything, notifications are way to go:
+
+    $client->notify('logout');
+
+Error handling
+--------------
+
+Josser informs about errors through  set of exceptions.
+
+    use Josser\Client;
+    use Josser\Exception\RpcFaultException;
+    use Josser\Exception\TransportFailureException;
+
+    // instantiate client
+
+    try {
+        $client->request('method', array(1, "param2"));
+    } catch (RpcFaultException $e) {
+        echo 'Ups! Remote server sent an error.';
+    } catch (TransportFailureException $e) {
+        echo 'Josser did not send remote call.';
+    }
+
+For convenience catch-all exception exists.
+
+    use Josser\Client;
+    use Josser\Exception\JosserException;
+
+    // instantiate client
+    
+    try {
+        $client->request('method', array(1, "param2"));
+    } catch (JosserException $e) {
+        echo 'An unknown Josser error occurred.';
+    }
+
+Specialized clients
+-------------------
+
+At this moment Josser offers Bitcoin client.
+
+    use Josser\Client\Bitcoin;
+    use Josser\Transport\HttpTransport;
+
+    // bitcoin communicates via http
+    $http = new HttpTransport('http://user:password@127.0.0.1:8332');
+
+    $bitcoin = new Bitcoin($http);
+
+    $i_am_broke = $bitcoin->getBalance();
+
+    var_dump($i_am_broke); // float(0.005)
+
+About
+=====
+
+Requirements
+------------
+
+PHP >= 5.3
+
+Submitting bugs and feature requests
+------------------------------------
+
+Bugs and feature request are tracked on [Github](https://github.com/alanbem/josser/issues)
+
+Author
+------
+
+Alan Gabriel Bem - <alan.bem@gmail.com>
+
+License
+-------
+
+Josser is licensed under the BSD License - see the LICENSE file for details
