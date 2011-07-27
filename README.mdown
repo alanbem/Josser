@@ -47,7 +47,7 @@ Invoking remote methods is fairly simple:
 
     var_dump($sum); // int(9)
 
-If remote method does not return anything, notifications are way to go:
+If remote method does not return anything, notifications are what you need:
 
     $client->notify('logout');
 
