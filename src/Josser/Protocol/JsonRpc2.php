@@ -176,31 +176,31 @@ class JsonRpc2 extends JsonRpc
         $dto = (array) $dto;
 
         // version check
-        if(!isset($dto['jsonrpc'])) {
+        if(!array_key_exists('jsonrpc', $dto)) {
             $error = 'Response JSON-RPC version not defined.';
             throw new InvalidResponseException($error);
         }
         $this->validateResponseDataTransferObjectVersion($dto['jsonrpc']);
 
         // id check
-        if(!isset($dto['id'])) {
+        if(!array_key_exists('id', $dto)) {
             $error = 'Response id not defined.';
             throw new InvalidResponseException($error);
         }
         $this->validateResponseDataTransferObjectId($dto['id']);
 
         // response or error - not both
-        if(isset($dto['result']) && isset($dto['error'])) {
+        if(array_key_exists('result', $dto) && array_key_exists('error', $dto)) {
             $error = 'Error object and result found in response.';
             throw new InvalidResponseException($error);
         }
-        if(!isset($dto['result']) && !isset($dto['error'])) {
+        if(!array_key_exists('result', $dto) && !array_key_exists('error', $dto)) {
             $error = 'Error object or result not found in response.';
             throw new InvalidResponseException($error);
         }
 
         // optional result check
-        if(isset($dto['result'])) {
+        if(array_key_exists('result', $dto)) {
             $this->validateResponseDataTransferObjectResult($dto['result']);
             return;
         }
@@ -256,12 +256,12 @@ class JsonRpc2 extends JsonRpc
     private function validateResponseDataTransferObjectError($rpcError)
     {
         if(!is_array($rpcError)) {
-            $error = "Incorrect error object detected. An array or object expected.";
+            $error = sprintf("Incorrect error object detected. An array or object expected. %s type detected.", gettype($rpcError));
             throw new InvalidResponseException($error);
         }
         $rpcError = (array) $rpcError;
         
-        if(!isset($rpcError['code'])) {
+        if(!array_key_exists('code', $rpcError)) {
             $error = 'Response error code is not defined.';
             throw new InvalidResponseException($error);
         }
@@ -270,7 +270,7 @@ class JsonRpc2 extends JsonRpc
             throw new InvalidResponseException($error);
         }
 
-        if(!isset($rpcError['message'])) {
+        if(!array_key_exists('message', $rpcError)) {
             $error = 'Response error message is not defined.';
             throw new InvalidResponseException($error);
         }
