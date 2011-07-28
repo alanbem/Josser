@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Josser\Client;
+namespace Josser\Client\Request;
 
-use Josser\Client\ProtocolInterface;
+use Josser\Client\Protocol\ProtocolInterface;
 
 /**
  * JSON-RPC request interface.
@@ -53,7 +53,7 @@ interface RequestInterface
      * Return DTO of a request.
      *
      * @abstract
-     * @param ProtocolInterface $protocol
+     * @param \Josser\Client\Protocol\ProtocolInterface $protocol
      * @return mixed
      */
     public function getDataTransferObject(ProtocolInterface $protocol);

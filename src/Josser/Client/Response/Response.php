@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Josser\Client;
+namespace Josser\Client\Response;
 
-use Josser\Client\ResponseInterface;
-use Josser\Client\ProtocolInterface;
+use Josser\Client\Response\ResponseInterface;
+use Josser\Client\Protocol\ProtocolInterface;
 
 /**
  * JSON-RPC client response object.

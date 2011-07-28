@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Josser\Client;
+namespace Josser\Client\Request;
 
 use Josser\Exception\InvalidArgumentException;
 use Josser\Exception\BadMethodCallException;
-use Josser\Client\RequestInterface;
-use Josser\Client\ProtocolInterface;
+use Josser\Client\Request\RequestInterface;
+use Josser\Client\Protocol\ProtocolInterface;
 
 /**
  * JSON-RPC request object.
@@ -101,7 +101,7 @@ class Request implements RequestInterface
     /**
      * Return DTO of $this request.
      *
-     * @param \Josser\Client\ProtocolInterface $protocol
+     * @param \Josser\Client\Protocol\ProtocolInterface $protocol
      * @return mixed
      */
     public function getDataTransferObject(ProtocolInterface $protocol)

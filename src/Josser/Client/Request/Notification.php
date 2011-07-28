@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Josser\Client;
+namespace Josser\Client\Request;
 
 use Josser\Exception\InvalidArgumentException;
 use Josser\Exception\BadMethodCallException;
-use Josser\Client\Request;
-use Josser\Client\ProtocolInterface;
+use Josser\Client\Request\Request;
+use Josser\Client\Protocol\ProtocolInterface;
 
 /**
  * JSON-RPC explicit client notification object.

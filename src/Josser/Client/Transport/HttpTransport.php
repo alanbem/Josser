@@ -11,7 +11,7 @@
 
 namespace Josser\Client\Transport;
 
-use Josser\Client\TransportInterface;
+use Josser\Client\Transport\TransportInterface;
 use Josser\Exception\TransportFailureException;
 
 /**

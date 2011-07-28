@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Josser\Client;
+namespace Josser\Client\Transport;
 
 /**
  * JSON-RPC transport interface.

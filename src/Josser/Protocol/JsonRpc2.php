@@ -11,10 +11,10 @@
 
 namespace Josser\Protocol;
 
-use Josser\Client\ResponseInterface;
-use Josser\Client\Response;
-use Josser\Client\RequestInterface;
-use Josser\Client\Request;
+use Josser\Client\Response\ResponseInterface;
+use Josser\Client\Response\Response;
+use Josser\Client\Request\RequestInterface;
+use Josser\Client\Request\Request;
 use Josser\Endec\EndecInterface;
 use Josser\Endec\BasicJsonEndec;
 use Josser\Exception\InvalidArgumentException;
@@ -58,7 +58,7 @@ class JsonRpc2 extends JsonRpc
      * Create response object.
      *
      * @param mixed $dto
-     * @return \Josser\ResponseInterface
+     * @return \Josser\Client\Response\ResponseInterface
      */
     public function createResponse($dto)
     {
@@ -126,8 +126,8 @@ class JsonRpc2 extends JsonRpc
     /**
      * Validate $request object.
      *
-     * @param \Josser\Client\RequestInterface $request
-     * @return \Josser\Client\RequestInterface
+     * @param \Josser\Client\Request\RequestInterface $request
+     * @return \Josser\Client\Request\RequestInterface
      */
     public function validateRequest(RequestInterface $request)
     {
@@ -140,7 +140,7 @@ class JsonRpc2 extends JsonRpc
     /**
      * Return DTO of a request.
      *
-     * @param \Josser\Client\RequestInterface $request
+     * @param \Josser\Client\Request\RequestInterface $request
      * @return array
      */
     public function getRequestDataTransferObject(RequestInterface $request)

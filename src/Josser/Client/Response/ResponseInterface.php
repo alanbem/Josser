@@ -9,34 +9,28 @@
  * file that was distributed with this source code.
  */
 
-namespace Josser\Client;
-
-use Josser\Client\ResponseInterface;
+namespace Josser\Client\Response;
 
 /**
- * NullObject JSON-RPC response
+ * JSON-RPC response interface.
  *
  * @author Alan Gabriel Bem <alan.bem@gmail.com>
  */
-class NoResponse implements ResponseInterface
+interface ResponseInterface
 {
     /**
      * Retrieve response result.
      *
+     * @abstract
      * @return mixed
      */
-    function getResult()
-    {
-        return;
-    }
+    function getResult();
 
     /**
      * Get response id.
      *
+     * @abstract
      * @return mixed
      */
-    function getId()
-    {
-        return;
-    }
+    function getId();
 }

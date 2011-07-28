@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Josser\Client;
+namespace Josser\Client\Protocol;
 
-use Josser\Client\ResponseInterface;
-use Josser\Client\RequestInterface;
+use Josser\Client\Response\ResponseInterface;
+use Josser\Client\Request\RequestInterface;
 use Josser\Endec\EndecInterface;
 
 /**
@@ -28,7 +28,7 @@ interface ProtocolInterface
      * @abstract
      * @param string $method
      * @param array $params
-     * @return \Josser\Client\RequestInterface
+     * @return \Josser\Client\Request\RequestInterface
      */
     function createNotification($method, array $params = null);
 
@@ -38,7 +38,7 @@ interface ProtocolInterface
      * @abstract
      * @param string $method
      * @param array|null $params
-     * @return \Josser\Client\RequestInterface
+     * @return \Josser\Client\Request\RequestInterface
      */
     function createRequest($method, array $params = null);
 
@@ -47,7 +47,7 @@ interface ProtocolInterface
      *
      * @abstract
      * @param mixed $dto
-     * @return \Josser\Client\ResponseInterface
+     * @return \Josser\Client\Response\ResponseInterface
      */
     function createResponse($dto);
 
@@ -69,8 +69,8 @@ interface ProtocolInterface
      * Checks whether request matches response.
      *
      * @abstract
-     * @param \Josser\Client\RequestInterface $request
-     * @param \Josser\Client\ResponseInterface $response
+     * @param \Josser\Client\Request\RequestInterface $request
+     * @param \Josser\Client\Response\ResponseInterface $response
      * @return boolean
      */
     function match(RequestInterface $request, ResponseInterface $response);
@@ -79,8 +79,8 @@ interface ProtocolInterface
      * Validate $request object.
      *
      * @abstract
-     * @param \Josser\Client\RequestInterface $request
-     * @return \Josser\Client\RequestInterface
+     * @param \Josser\Client\Request\RequestInterface $request
+     * @return \Josser\Client\Request\RequestInterface
      */
     function validateRequest(RequestInterface $request);
 
@@ -88,7 +88,7 @@ interface ProtocolInterface
      * Return DTO of a request.
      *
      * @abstract
-     * @param \Josser\Client\RequestInterface $request
+     * @param \Josser\Client\Request\RequestInterface $request
      * @return mixed
      */
     function getRequestDataTransferObject(RequestInterface $request);

@@ -11,10 +11,10 @@
 
 namespace Josser\Protocol;
 
-use Josser\Client\ProtocolInterface as ClientProtocol;
-use Josser\Client\RequestInterface;
-use Josser\Client\Request;
-use Josser\Client\ResponseInterface;
+use Josser\Client\Protocol\ProtocolInterface as ClientProtocol;
+use Josser\Client\Request\RequestInterface;
+use Josser\Client\Request\Request;
+use Josser\Client\Response\ResponseInterface;
 use Josser\Client\Response;
 use Josser\Endec\EndecInterface;
 
@@ -45,7 +45,7 @@ abstract class JsonRpc implements ClientProtocol
      *
      * @param string $method
      * @param array $params
-     * @return \Josser\Client\RequestInterface
+     * @return \Josser\Client\Request\RequestInterface
      */
     public function createNotification($method, array $params = null)
     {
@@ -59,7 +59,7 @@ abstract class JsonRpc implements ClientProtocol
      *
      * @param string $method
      * @param array $params
-     * @return \Josser\RequestInterface
+     * @return \Josser\Client\Request\RequestInterface
      */
     final public function createRequest($method, array $params = null)
     {
@@ -71,8 +71,8 @@ abstract class JsonRpc implements ClientProtocol
     /**
      * Checks whether request matches response.
      *
-     * @param \Josser\RequestInterface $request
-     * @param \Josser\ResponseInterface $response
+     * @param \Josser\Client\Request\RequestInterface $request
+     * @param \Josser\Client\Response\ResponseInterface $response
      * @return boolean
      */
     function match(RequestInterface $request, ResponseInterface $response)
