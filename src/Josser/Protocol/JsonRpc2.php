@@ -16,7 +16,7 @@ use Josser\Client\Response\Response;
 use Josser\Client\Request\RequestInterface;
 use Josser\Client\Request\Request;
 use Josser\Endec\EndecInterface;
-use Josser\Endec\BasicJsonEndec;
+use Josser\Endec\JsonEndec;
 use Josser\Exception\InvalidArgumentException;
 use Josser\Exception\InvalidResponseException;
 use Josser\Exception\RpcFaultException;
@@ -39,7 +39,7 @@ class JsonRpc2 extends JsonRpc
     {
         if(null === $endec)
         {
-            $endec = new BasicJsonEndec();
+            $endec = new JsonEndec();
         }
         parent::__construct($endec);
     }

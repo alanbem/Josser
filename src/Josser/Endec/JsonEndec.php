@@ -18,7 +18,7 @@ use Josser\Endec\EndecInterface;
  *
  * @author Alan Gabriel Bem <alan.bem@gmail.com>
  */
-class BasicJsonEndec implements EndecInterface
+class JsonEndec implements EndecInterface
 {
     /**
      * Encode $dto to JSON.

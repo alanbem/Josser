@@ -123,7 +123,7 @@ abstract class JsonRpc implements ClientProtocol
     }
 
     /**
-     * @return \Josser\Endec\BasicJsonEndec
+     * @return \Josser\Endec\JsonEndec
      */
     public function getEndec()
     {
