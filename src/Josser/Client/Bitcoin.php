@@ -13,7 +13,7 @@ namespace Josser\Client;
 
 use Josser\Client;
 use Josser\Protocol\JsonRpc1 as BitcoinProtocol;
-use Josser\Client\TransportInterface;
+use Josser\Client\Transport\HttpTransport;
 
 /**
  * Bitcoin client.
@@ -23,13 +23,23 @@ use Josser\Client\TransportInterface;
 class Bitcoin extends Client
 {
     /**
+     * bitcoin daemon url
+     *
+     * @var string
+     */
+    private $url;
+
+    /**
      * Constructor.
      *
-     * @param \Josser\Client\TransportInterface $transport
+     * @param string $url
      */
-    public function __construct(TransportInterface $transport)
+    public function __construct($url)
     {
-        parent::__construct($transport, new BitcoinProtocol);
+        $this->url = $url;
+        $transport = new HttpTransport($this->url);
+        $protocol = new BitcoinProtocol;
+        parent::__construct($transport, $protocol);
     }
 
     /**
