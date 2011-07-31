@@ -11,12 +11,12 @@
 
 namespace Josser;
 
-use Josser\Client\RequestInterface;
-use Josser\Client\ResponseInterface;
-use Josser\Client\ProtocolInterface;
-use Josser\Client\NoResponse;
+use Josser\Client\Request\RequestInterface;
+use Josser\Client\Response\ResponseInterface;
+use Josser\Client\Protocol\ProtocolInterface;
+use Josser\Client\Response\NoResponse;
 use Josser\Protocol\JsonRpc2;
-use Josser\Client\TransportInterface;
+use Josser\Client\Transport\TransportInterface;
 use Josser\Exception\RequestResponseMismatchException;
 
 /**

@@ -12,8 +12,8 @@
 namespace Josser\Exception;
 
 use Josser\Exception\JosserException;
-use Josser\Client\RequestInterface;
-use Josser\Client\ResponseInterface;
+use Josser\Client\Request\RequestInterface;
+use Josser\Client\Response\ResponseInterface;
 
 /**
  * Request/Response mismatch exception.

@@ -13,7 +13,7 @@ namespace Josser\Client;
 
 use Josser\Client;
 use Josser\Protocol\JsonRpc1 as BitcoinProtocol;
-use Josser\Client\TransportInterface;
+use Josser\Client\Transport\TransportInterface;
 
 /**
  * Bitcoin client.
