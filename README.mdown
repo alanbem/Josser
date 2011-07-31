@@ -68,6 +68,12 @@ Josser informs about errors through  set of exceptions.
         echo 'Ups! Remote server sent an error.';
     } catch (TransportFailureException $e) {
         echo 'Josser did not send remote call.';
+    } catch (RequestResponseMismatchException $e) {
+        echo "Response id does not match request id.";
+    } catch (InvalidResponseException $e) {
+        echo "Response object is invalid due to protocol constraints.";
+    } catch(InvalidArgumentException $e) {
+        echo "Request is invalid due to protocol constraints.";
     }
 
 For convenience catch-all exception exists.
