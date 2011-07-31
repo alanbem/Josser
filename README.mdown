@@ -98,7 +98,7 @@ At this moment Josser offers Bitcoin client.
     use Josser\Transport\HttpTransport;
 
     // bitcoin daemon communicates via http
-    $bitcoin = new Bitcoin('http://user:password@127.0.0.1:8332');
+    $bitcoin = new Bitcoin(new HttpTransport('http://user:password@127.0.0.1:8332'));
 
     $i_am_broke = $bitcoin->getBalance();
 
