@@ -86,7 +86,7 @@ For convenience catch-all exception exists.
     try {
         $client->request('method', array(1, "param2"));
     } catch (JosserException $e) {
-        echo 'An unknown Josser error occurred.';
+        echo 'Josser error occurred.';
     }
 
 Specialized clients
