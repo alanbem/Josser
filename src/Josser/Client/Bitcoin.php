@@ -14,6 +14,7 @@ namespace Josser\Client;
 use Josser\Client;
 use Josser\Protocol\JsonRpc1 as BitcoinProtocol;
 use Josser\Client\Transport\TransportInterface;
+use Josser\Client\Transport\HttpTransport;
 
 /**
  * Bitcoin client.
@@ -30,6 +31,18 @@ class Bitcoin extends Client
     public function __construct(TransportInterface $transport)
     {
         parent::__construct($transport, new BitcoinProtocol);
+    }
+
+    /**
+     * @static
+     * @param string $url
+     * @return \Josser\Client\Bitcoin
+     */
+    public static function create($url)
+    {
+        // TODO: build $url from $host, $user, $password and $port = 8332
+        $transport = new HttpTransport($url);
+        return new Bitcoin($transport);
     }
 
     /**

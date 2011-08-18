@@ -106,6 +106,8 @@ At this moment Josser offers Bitcoin client.
 
     // bitcoin daemon communicates via http
     $bitcoin = new Bitcoin(new HttpTransport('http://user:password@127.0.0.1:8332'));
+    // or
+    $bitcoin = Bitcoin::create('http://user:password@127.0.0.1:8332');
 
     $i_am_broke = $bitcoin->getBalance();
 
