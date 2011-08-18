@@ -70,7 +70,7 @@ class Client
     }
 
     /**
-     * Alias of Client::request()
+     * Alias of Client::call()
      *
      * @param $method
      * @param array $params
