@@ -45,8 +45,8 @@ class Client
     /**
      * Constructor.
      *
-     * @param \Josser\Client\TransportInterface $transport
-     * @param \Josser\Client\ProtocolInterface|null $protocol
+     * @param \Josser\Client\Transport\TransportInterface $transport
+     * @param \Josser\Client\Protocol\ProtocolInterface|null $protocol
      */
     public function __construct(TransportInterface $transport, ProtocolInterface $protocol = null)
     {
@@ -102,17 +102,15 @@ class Client
     /**
      * Execute JSON-RPC call.
      *
-     * @static
      * @throws \Josser\Exception\RequestResponseMismatchException
-     * @param \Josser\Client\RequestInterface $request
-     * @param \Josser\Client\TransportInterface|null $transport
-     * @return \Josser\Client\ResponseInterface
+     * @param \Josser\Client\Request\RequestInterface $request
+     * @param \Josser\Client\Transport\TransportInterface|null $transport
+     * @return \Josser\Client\Response\ResponseInterface
      */
     public function send(RequestInterface $request, TransportInterface $transport = null)
     {
         if(null === $transport) { // swap transport easily
             $transport = $this->transport;
-            
         }
 
         $this->protocol->validateRequest($request); // just in case
