@@ -9,13 +9,8 @@
  * file that was distributed with this source code.
  */
 
-require_once __DIR__.'/Josser/TestCase.php';
+require_once __DIR__.'/../vendor/symfony/Component/ClassLoader/UniversalClassLoader.php';
 
-spl_autoload_register(function($class)
-{
-    $file = __DIR__.'/../src/'.strtr($class, '\\', '/').'.php';
-    if (file_exists($file)) {
-        require $file;
-        return true;
-    }
-});
+$loader = new Symfony\Component\ClassLoader\UniversalClassLoader();
+$loader->registerNamespace('Josser', __DIR__.'/../src');
+$loader->register();
