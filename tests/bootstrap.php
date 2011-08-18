@@ -13,4 +13,5 @@ require_once __DIR__.'/../vendor/symfony/Component/ClassLoader/UniversalClassLoa
 
 $loader = new Symfony\Component\ClassLoader\UniversalClassLoader();
 $loader->registerNamespace('Josser', __DIR__.'/../src');
+$loader->registerNamespace('Josser\Tests', __DIR__);
 $loader->register();
