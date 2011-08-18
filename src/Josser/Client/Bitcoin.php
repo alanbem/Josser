@@ -25,7 +25,7 @@ class Bitcoin extends Client
     /**
      * Constructor.
      *
-     * @param \Josser\Client\TransportInterface $transport
+     * @param \Josser\Client\Transport\TransportInterface $transport
      */
     public function __construct(TransportInterface $transport)
     {
