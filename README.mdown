@@ -32,7 +32,8 @@ Usage
 
 Invoking remote methods is fairly simple:
 
-    use Josser\Client;
+    namespace Josser;
+
     use Josser\Transport\HttpTransport;
     use Josser\Protocol\JsonRpc1;
     
@@ -56,9 +57,13 @@ Error handling
 
 Josser informs about errors through  set of exceptions.
 
-    use Josser\Client;
+    namespace Josser;
+
     use Josser\Exception\RpcFaultException;
     use Josser\Exception\TransportFailureException;
+    use Josser\Exception\RequestResponseMismatchException;
+    use Josser\Exception\InvalidResponseException;
+    use Josser\Exception\InvalidArgumentException;
 
     // instantiate client
 
@@ -94,6 +99,8 @@ Specialized clients
 
 At this moment Josser offers Bitcoin client.
 
+    namespace Josser;
+    
     use Josser\Client\Bitcoin;
     use Josser\Transport\HttpTransport;
 
