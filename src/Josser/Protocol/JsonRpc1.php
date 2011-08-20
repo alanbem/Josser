@@ -126,6 +126,7 @@ class JsonRpc1 extends JsonRpc
     /**
      * Validate $request object.
      *
+     * @throws \Josser\Exception\InvalidArgumentException
      * @param \Josser\Client\Request\RequestInterface $request
      * @return \Josser\Client\Request\RequestInterface
      */
@@ -165,7 +166,7 @@ class JsonRpc1 extends JsonRpc
     /**
      * Validate response DTO.
      *
-     * @throws \Josser\Exception\RpcFaultException
+     * @throws \Josser\Exception\InvalidResponseException
      * @param mixed $dto
      * @return void
      */
