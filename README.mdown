@@ -111,7 +111,7 @@ At this moment Josser offers Bitcoin client.
 
     $i_am_broke = $bitcoin->getBalance();
 
-    var_dump($i_am_broke); // float(0.005)
+    var_dump($i_am_broke); // float(0)
 
 About
 =====
