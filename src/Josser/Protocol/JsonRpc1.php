@@ -189,14 +189,14 @@ class JsonRpc1 extends JsonRpc
             $error = 'Error object or result not found in response.';
             throw new InvalidResponseException($error);
         }
-        
-        // optional result check
-        if(array_key_exists('result', $dto)) {
-            $this->validateResponseDataTransferObjectResult($dto['result']);
-            return;
+
+        if(($dto['result'] === null && $dto['error'] === null) || ($dto['result'] !== null && $dto['error'] !== null)) {
+            $error = 'Either error or message must be null in response object. Not both and not neither.';
+            throw new InvalidResponseException($error);
         }
 
-        // optional error check.
+        $this->validateResponseDataTransferObjectResult($dto['result']);
+
         $this->validateResponseDataTransferObjectError($dto['error']);
     }
 
@@ -229,6 +229,10 @@ class JsonRpc1 extends JsonRpc
      */
     private function validateResponseDataTransferObjectError($rpcError)
     {
+        if(null === $rpcError) { // null is perfectly acceptable in case of valid response
+            return;
+        }
+
         if(!is_array($rpcError)) {
             $error = sprintf("Incorrect error object detected. An array or object expected. %s type detected.", gettype($rpcError));
             throw new InvalidResponseException($error);
