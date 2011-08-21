@@ -185,7 +185,7 @@ class JsonRpc1 extends JsonRpc
         }
         $this->validateResponseDataTransferObjectId($dto['id']);
 
-        if(!array_key_exists('result', $dto) && !array_key_exists('error', $dto)) {
+        if(!array_key_exists('result', $dto) || !array_key_exists('error', $dto)) {
             $error = 'Error object or result not found in response.';
             throw new InvalidResponseException($error);
         }
