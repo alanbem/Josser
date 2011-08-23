@@ -77,7 +77,7 @@ abstract class JsonRpc implements ClientProtocol
      */
     function match(RequestInterface $request, ResponseInterface $response)
     {
-        return (boolean) $request->getId() == $response->getId();
+        return (boolean) ($request->getId() == $response->getId());
     }
 
     /**
