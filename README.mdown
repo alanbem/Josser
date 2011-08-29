@@ -32,86 +32,110 @@ Usage
 
 Invoking remote methods is fairly simple:
 
-    namespace Josser;
+```php
+<?php
 
-    use Josser\Transport\HttpTransport;
-    use Josser\Protocol\JsonRpc1;
-    
-    $transport = new HttpTransport('http://user:password@your-service.com/math:8888'); // RPC over http
-    $protocol  = new JsonRpc1; // lets use JSON-RPC 1.0
+namespace Josser;
 
-    // $protocol can be omitted - JSON-RPC 2.0 is used then by default.
-    $client = new Client($transport, $protocol);
+use Josser\Transport\HttpTransport;
+use Josser\Protocol\JsonRpc1;
 
-    // send a request
-    $sum = $client->request('sum', array(5, 4));
+$transport = new HttpTransport('http://user:password@your-service.com/math:8888'); // RPC over http
+$protocol  = new JsonRpc1; // lets use JSON-RPC 1.0
 
-    var_dump($sum); // int(9)
+// $protocol can be omitted - JSON-RPC 2.0 is used then by default.
+$client = new Client($transport, $protocol);
+
+// send a request
+$sum = $client->request('sum', array(5, 4));
+
+var_dump($sum); // int(9)
+```
 
 If remote method does not return anything, notifications are what you need:
 
-    $client->notify('logout');
+```php
+<?php
+
+// instantiate client
+
+$client->notify('logout');
+```
 
 Error handling
 --------------
 
 Josser informs about errors through  set of exceptions.
+ 
+```php
+<?php
 
-    namespace Josser;
+namespace Josser;
 
-    use Josser\Exception\RpcFaultException;
-    use Josser\Exception\TransportFailureException;
-    use Josser\Exception\RequestResponseMismatchException;
-    use Josser\Exception\InvalidResponseException;
-    use Josser\Exception\InvalidArgumentException;
+use Josser\Exception\RpcFaultException;
+use Josser\Exception\TransportFailureException;
+use Josser\Exception\RequestResponseMismatchException;
+use Josser\Exception\InvalidResponseException;
+use Josser\Exception\InvalidArgumentException;
 
-    // instantiate client
+// instantiate client
 
-    try {
-        $client->request('method', array(1, "param2"));
-    } catch (RpcFaultException $e) {
-        echo 'Ups! Remote server sent an error.';
-    } catch (TransportFailureException $e) {
-        echo 'Josser did not send remote call.';
-    } catch (RequestResponseMismatchException $e) {
-        echo "Response id does not match request id.";
-    } catch (InvalidResponseException $e) {
-        echo "Response object is invalid due to protocol constraints.";
-    } catch(InvalidArgumentException $e) {
-        echo "Request is invalid due to protocol constraints.";
-    }
+try {
+    $client->request('method', array(1, "param2"));
+} catch (RpcFaultException $e) {
+    echo 'Ups! Remote server sent an error.';
+} catch (TransportFailureException $e) {
+    echo 'Josser did not send remote call.';
+} catch (RequestResponseMismatchException $e) {
+    echo "Response id does not match request id.";
+} catch (InvalidResponseException $e) {
+    echo "Response object is invalid due to protocol constraints.";
+} catch(InvalidArgumentException $e) {
+    echo "Request is invalid due to protocol constraints.";
+}              
+```
 
 For convenience catch-all exception exists.
+  
+```php
+<?php
 
-    use Josser\Client;
-    use Josser\Exception\JosserException;
+namespace Josser;
 
-    // instantiate client
-    
-    try {
-        $client->request('method', array(1, "param2"));
-    } catch (JosserException $e) {
-        echo 'Josser error occurred.';
-    }
+use Josser\Client;
+use Josser\Exception\JosserException;
+
+// instantiate client
+
+try {
+    $client->request('method', array(1, "param2"));
+} catch (JosserException $e) {
+    echo 'Josser error occurred.';
+}           
+```
 
 Specialized clients
 -------------------
 
 At this moment Josser offers Bitcoin client.
 
-    namespace Josser;
-    
-    use Josser\Client\Bitcoin;
-    use Josser\Transport\HttpTransport;
+```php
+<?php
 
-    // bitcoin daemon communicates via http
-    $bitcoin = new Bitcoin(new HttpTransport('http://user:password@127.0.0.1:8332'));
-    // or
-    $bitcoin = Bitcoin::create('http://user:password@127.0.0.1:8332');
+namespace Josser;
 
-    $i_am_broke = $bitcoin->getBalance();
+use Josser\Client\Bitcoin;
+use Josser\Transport\HttpTransport;
 
-    var_dump($i_am_broke); // float(0)
+// bitcoin daemon communicates via http
+$bitcoin = new Bitcoin(new HttpTransport('http://user:password@127.0.0.1:8332'));
+// or
+$bitcoin = Bitcoin::create('http://user:password@127.0.0.1:8332');
+
+$i_am_broke = $bitcoin->getBalance();
+
+var_dump($i_am_broke); // float(0)
+```
 
 About
 =====
