@@ -259,4 +259,30 @@ class Bitcoin extends Client
         return $this->request('setaccount', array($address, $account));
     }
 
+    /**
+     * Return information about bitcoin $address.
+     * 
+     * @param string $address
+     * @return array
+     */
+    public function validateAddress($address)
+    {
+        return $this->request('validateaddress', array($address));
+    }
+    
+    /**
+     * Checks whether bitcoin $address is valid.
+     *
+     * @param string $address
+     * @return bool
+     */
+    public function isAddressValid($address)
+    {
+        $result = $this->validateAddress($address);
+        if(is_array($result) && array_key_exists('isvalid', $result) && $result['isvalid'] == true) {
+            return true;
+        }
+        return false;
+    }
+
 }
