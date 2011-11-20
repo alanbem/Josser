@@ -127,10 +127,10 @@ namespace Josser;
 use Josser\Client\Bitcoin;
 use Josser\Transport\HttpTransport;
 
-// bitcoin daemon communicates via http
+// bitcoin daemon can communicate via http
 $bitcoin = new Bitcoin(new HttpTransport('http://user:password@127.0.0.1:8332'));
-// or
-$bitcoin = Bitcoin::create('http://user:password@127.0.0.1:8332');
+// factory method is available as well
+$bitcoin = Bitcoin::create('127.0.0.1', 'user', 'password', 8332, false);
 
 $i_am_broke = $bitcoin->getBalance();
 

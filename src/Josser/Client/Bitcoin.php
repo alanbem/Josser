@@ -37,14 +37,44 @@ class Bitcoin extends Client
      * Factory method for creating bitcoin client.
      *
      * @static
-     * @param string $url
+     * @param string $host
+     * @param string $user
+     * @param string $password
+     * @param int $port
+     * @param bool $isSecure    Whether secure connection should be used
      * @return \Josser\Client\Bitcoin
      */
-    public static function create($url)
+    public static function create($host, $user, $password, $port = 8332, $isSecure = false)
     {
-        // TODO: build $url from $host, $user, $password and $port = 8332
+        $url = self::buildUrl((string) $host, (string) $user, (string) $password, (integer) $port, (boolean) $isSecure);
+
         $transport = new HttpTransport($url);
         return new Bitcoin($transport);
+    }
+
+    /**
+     * Builds http url.
+     *
+     * @static
+     * @param string $host
+     * @param string $user
+     * @param string $password
+     * @param int $port
+     * @param bool $isSecure    Indicates whether http or https protocol should be used.
+     * @return string
+     */
+    private static function buildUrl($host, $user, $password, $port, $isSecure)
+    {
+        if ((bool) $isSecure) {
+            $scheme = 'https';
+        } else {
+            $scheme = 'http';
+        }
+
+        $url = '%s://%s:%s@%s:%d';
+        $url = sprintf($url, $scheme, $user, $password, $host, $port);
+
+        return $url;
     }
 
     /**
