@@ -19,7 +19,7 @@ namespace Josser\Endec;
 interface EndecInterface
 {
     /**
-     * Encode $dto to impl format.
+     * Encode $dto to supported format.
      *
      * @abstract
      * @param mixed $dto
@@ -28,7 +28,7 @@ interface EndecInterface
     function encode($dto);
 
     /**
-     * Decode impl $format.
+     * Decode $format from supported format.
      *
      * @abstract
      * @param string $format

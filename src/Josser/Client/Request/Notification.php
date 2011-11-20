@@ -17,7 +17,7 @@ use Josser\Client\Request\Request;
 use Josser\Client\Protocol\ProtocolInterface;
 
 /**
- * JSON-RPC explicit client notification object.
+ * JSON-RPC explicit notification object.
  *
  * @author Alan Gabriel Bem <alan.bem@gmail.com>
  */
