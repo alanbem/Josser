@@ -60,7 +60,7 @@ class Client
     /**
      * Send request.
      *
-     * @param $method
+     * @param string $method
      * @param array $params
      * @return mixed
      */
@@ -72,7 +72,7 @@ class Client
     /**
      * Alias of Client::call()
      *
-     * @param $method
+     * @param string $method
      * @param array $params
      * @return mixed
      */
