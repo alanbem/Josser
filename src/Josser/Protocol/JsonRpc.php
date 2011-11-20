@@ -26,7 +26,7 @@ use Josser\Endec\EndecInterface;
 abstract class JsonRpc implements ClientProtocol
 {
     /**
-     * @var EndecInterface
+     * @var \Josser\Endec\EndecInterface
      */
     protected $endec;
 

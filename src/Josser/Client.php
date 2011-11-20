@@ -31,14 +31,14 @@ class Client
     /**
      * JSON-RPC call transport.
      *
-     * @var \Josser\Client\TransportInterface
+     * @var \Josser\Client\Transport\TransportInterface
      */
     private $transport;
 
     /**
      * JSON-RPC protocol
      *
-     * @var \Josser\Client\ProtocolInterface
+     * @var \Josser\Client\Protocol\ProtocolInterface
      */
     private $protocol;
 

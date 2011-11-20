@@ -23,7 +23,7 @@ class ResponseTest extends JosserTestCase
      * Test response object.
      *
      * @param mixed $result
-     * #param mixed $id
+     * @param mixed $id
      * @return void
      *
      * @dataProvider responseDataProvider

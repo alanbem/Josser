@@ -34,6 +34,8 @@ class Bitcoin extends Client
     }
 
     /**
+     * Factory method for creating bitcoin client.
+     *
      * @static
      * @param string $url
      * @return \Josser\Client\Bitcoin
