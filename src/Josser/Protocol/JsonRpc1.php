@@ -172,7 +172,7 @@ class JsonRpc1 extends JsonRpc
      */
     public function validateResponseDataTransferObject($dto)
     {
-        if(!is_array($dto) && !($dto instanceof stdClass)) {
+        if(!is_array($dto) && !is_object($dto)) {
             $error = sprintf("Incorrect response type detected. An array or object expected. %s type detected.", gettype($dto));
             throw new InvalidResponseException($error);
         }
