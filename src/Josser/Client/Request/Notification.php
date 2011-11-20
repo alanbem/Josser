@@ -49,7 +49,7 @@ class Notification extends Request
      *
      * @return bool
      */
-    public function isNotification()
+    final public function isNotification()
     {
         return true;
     }
