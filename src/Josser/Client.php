@@ -74,14 +74,15 @@ class Client
      *
      * @param string $method
      * @param array $params
+     * @param mixed|null $id
      * @return mixed
      */
-    public function request($method, array $params = null)
+    public function request($method, array $params = null, $id = null)
     {
         if(null === $params) {
             $params = array();
         }
-        $request = $this->protocol->createRequest($method, $params);
+        $request = $this->protocol->createRequest($method, $params, $id);
         $response = $this->send($request, $this->transport);
         return $response->getResult();
     }

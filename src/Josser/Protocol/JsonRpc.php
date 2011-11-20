@@ -14,6 +14,7 @@ namespace Josser\Protocol;
 use Josser\Client\Protocol\ProtocolInterface as ClientProtocol;
 use Josser\Client\Request\RequestInterface;
 use Josser\Client\Request\Request;
+use Josser\Client\Request\Notification;
 use Josser\Client\Response\ResponseInterface;
 use Josser\Client\Response;
 use Josser\Endec\EndecInterface;
@@ -49,7 +50,7 @@ abstract class JsonRpc implements ClientProtocol
      */
     public function createNotification($method, array $params = null)
     {
-        $notification = new Request($method, $params);
+        $notification = new Notification($method, $params);
         $this->validateRequest($notification);
         return $notification;
     }
@@ -59,11 +60,12 @@ abstract class JsonRpc implements ClientProtocol
      *
      * @param string $method
      * @param array $params
+     * @param mixed|null $id
      * @return \Josser\Client\Request\RequestInterface
      */
-    final public function createRequest($method, array $params = null)
+    final public function createRequest($method, array $params = null, $id = null)
     {
-        $request = new Request($method, $params, $this->generateRequestId());
+        $request = new Request($method, $params, $id ?: $this->generateRequestId());
         $this->validateRequest($request);
         return $request;
     }
