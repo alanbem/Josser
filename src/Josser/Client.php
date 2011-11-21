@@ -58,19 +58,20 @@ class Client
     }
 
     /**
-     * Send request.
+     * Alias of Client::request()
      *
      * @param string $method
-     * @param array $params
+     * @param array|null $params
+     * @param mixed|null $id
      * @return mixed
      */
-    public function call($method, array $params)
+    public function call($method, array $params = null, $id = null)
     {
-        return $this->request($method, $params);
+        return $this->request($method, $params, $id);
     }
 
     /**
-     * Alias of Client::call()
+     * Send request.
      *
      * @param string $method
      * @param array $params
