@@ -23,26 +23,6 @@ use Josser\Endec\EndecInterface;
 interface ProtocolInterface
 {
     /**
-     * Create notification object.
-     *
-     * @abstract
-     * @param string $method
-     * @param array $params
-     * @return \Josser\Client\Request\RequestInterface
-     */
-    function createNotification($method, array $params = null);
-
-    /**
-     * Create request object.
-     *
-     * @abstract
-     * @param string $method
-     * @param array|null $params
-     * @return \Josser\Client\Request\RequestInterface
-     */
-    function createRequest($method, array $params = null);
-
-    /**
      * Create response object.
      *
      * @abstract
@@ -52,6 +32,8 @@ interface ProtocolInterface
     function createResponse($dto);
 
     /**
+         * Retrieve Encoder/Decoder object.
+     *
      * @abstract
      * @return \Josser\Endec\EndecInterface
      */
@@ -102,4 +84,21 @@ interface ProtocolInterface
      * @return void
      */
     function validateResponseDataTransferObject($dto);
+
+    /**
+     * Check whether $request is a notification.
+     *
+     * @abstract
+     * @param \Josser\Client\Request\RequestInterface $request
+     * @return boolean
+     */
+    function isNotification(RequestInterface $request);
+
+    /**
+     * Generate random string for a response identifier.
+     *
+     * @abstract
+     * @return mixed
+     */
+    function generateRequestId();
 }

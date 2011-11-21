@@ -43,7 +43,6 @@ use Josser\Protocol\JsonRpc1;
 $transport = new HttpTransport('http://user:password@your-service.com/math:8888'); // RPC over http
 $protocol  = new JsonRpc1; // lets use JSON-RPC 1.0
 
-// $protocol can be omitted - JSON-RPC 2.0 is used then by default.
 $client = new Client($transport, $protocol);
 
 // send a request
@@ -76,7 +75,7 @@ use Josser\Exception\RpcFaultException;
 use Josser\Exception\TransportFailureException;
 use Josser\Exception\RequestResponseMismatchException;
 use Josser\Exception\InvalidResponseException;
-use Josser\Exception\InvalidArgumentException;
+use Josser\Exception\InvalidRequestException;
 
 // instantiate client
 
@@ -90,7 +89,7 @@ try {
     echo "Response id does not match request id.";
 } catch (InvalidResponseException $e) {
     echo "Response object is invalid due to protocol constraints.";
-} catch(InvalidArgumentException $e) {
+} catch(InvalidRequestException $e) {
     echo "Request is invalid due to protocol constraints.";
 }              
 ```

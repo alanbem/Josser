@@ -32,7 +32,6 @@ class RequestTest extends JosserTestCase
      * @covers \Josser\Client\Request\Request::getMethod
      * @covers \Josser\Client\Request\Request::getParams
      * @covers \Josser\Client\Request\Request::getId
-     * @covers \Josser\Client\Request\Request::isNotification
      */
     public function testRequest($method, array $params, $id, $isNotification)
     {
@@ -41,7 +40,6 @@ class RequestTest extends JosserTestCase
         $this->assertEquals($method, $request->getMethod());
         $this->assertEquals($params, $request->getParams());
         $this->assertEquals($id, $request->getId());
-        $this->assertEquals($isNotification, $request->isNotification());
     }
 
     /**

@@ -17,7 +17,7 @@ use Josser\Client\Request\RequestInterface;
 use Josser\Client\Request\Request;
 use Josser\Endec\EndecInterface;
 use Josser\Endec\JsonEndec;
-use Josser\Exception\InvalidArgumentException;
+use Josser\Exception\InvalidRequestException;
 use Josser\Exception\InvalidResponseException;
 use Josser\Exception\RpcFaultException;
 use Josser\Protocol\JsonRpc;
@@ -76,42 +76,45 @@ class JsonRpc1 extends JsonRpc
     /**
      * Validate and filter request method name.
      *
-     * @throws \Josser\Exception\InvalidArgumentException
+     * @throws \Josser\Exception\InvalidRequestException
      * @param string $method
-     * @return string
+     * @return void
      */
     private function validateRequestMethod($method)
     {
         if(!is_string($method)) {
             $error = sprintf('Invalid method type. Remote method name must be string. %s detected.', gettype($method));
-            throw new InvalidArgumentException($error);
+            throw new InvalidRequestException($error);
         }
 //        if(substr($method, 0, 4) == 'rpc.') {
 //            $error = 'Invalid remote method. Method name cannot start with "rpc.".';
-//            throw new InvalidArgumentException($error);
+//            throw new InvalidRequestException($error);
 //        }
-        return $method;
     }
 
     /**
      * Validate request parameters.
      *
-     * @throws \Josser\Exception\InvalidArgumentException
+     * @throws \Josser\Exception\InvalidRequestException
      * @param array $params
-     * @return array|object
+     * @return void
      */
     private function validateRequestParams(array $params)
     {
+        if(empty($params)) {
+            return ;
+        }
+
         if(!$this->isIndexed($params)) {
             $error = 'Invalid parameters structure. Parameters must be hold within indexed-only array.';
-            throw new InvalidArgumentException($error);
+            throw new InvalidRequestException($error);
         }
     }
 
     /**
      * Validate and filter request id.
      *
-     * @throws \Josser\Exception\InvalidArgumentException
+     * @throws \Josser\Exception\InvalidRequestException
      * @param mixed $id
      * @return void
      */
@@ -119,14 +122,14 @@ class JsonRpc1 extends JsonRpc
     {
         if(!is_string($id) && !is_numeric($id)) {
             $error = sprintf('Invalid request id type. Request id must be string or numeric. Request id of %s type detected.', gettype($id));
-            throw new InvalidArgumentException($error);
+            throw new InvalidRequestException($error);
         }
     }
 
     /**
      * Validate $request object.
      *
-     * @throws \Josser\Exception\InvalidArgumentException
+     * @throws \Josser\Exception\InvalidRequestException
      * @param \Josser\Client\Request\RequestInterface $request
      * @return \Josser\Client\Request\RequestInterface
      */
@@ -155,7 +158,7 @@ class JsonRpc1 extends JsonRpc
         } else {
             $dto['params'] = array();
         }
-        if(!$request->isNotification()) {
+        if(!$this->isNotification($request)) {
             $dto['id'] = $request->getId();
         } else {
             $dto['id'] = null; 

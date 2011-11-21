@@ -11,7 +11,7 @@
 
 namespace Josser\Protocol;
 
-use Josser\Client\Protocol\ProtocolInterface as ClientProtocol;
+use Josser\Client\Protocol\ProtocolInterface;
 use Josser\Client\Request\RequestInterface;
 use Josser\Client\Request\Request;
 use Josser\Client\Request\Notification;
@@ -24,7 +24,7 @@ use Josser\Endec\EndecInterface;
  *
  * @author Alan Gabriel Bem <alan.bem@gmail.com>
  */
-abstract class JsonRpc implements ClientProtocol
+abstract class JsonRpc implements ProtocolInterface
 {
     /**
      * @var \Josser\Endec\EndecInterface
@@ -39,35 +39,6 @@ abstract class JsonRpc implements ClientProtocol
     public function __construct(EndecInterface $endec)
     {
         $this->endec = $endec;
-    }
-
-    /**
-     * Create notification object.
-     *
-     * @param string $method
-     * @param array $params
-     * @return \Josser\Client\Request\RequestInterface
-     */
-    public function createNotification($method, array $params = null)
-    {
-        $notification = new Notification($method, $params);
-        $this->validateRequest($notification);
-        return $notification;
-    }
-
-    /**
-     * Create request object.
-     *
-     * @param string $method
-     * @param array $params
-     * @param mixed|null $id
-     * @return \Josser\Client\Request\RequestInterface
-     */
-    final public function createRequest($method, array $params = null, $id = null)
-    {
-        $request = new Request($method, $params, $id ?: $this->generateRequestId());
-        $this->validateRequest($request);
-        return $request;
     }
 
     /**
@@ -119,16 +90,29 @@ abstract class JsonRpc implements ClientProtocol
      *
      * @return string
      */
-    protected  function generateRequestId()
+    public function generateRequestId()
     {
         return (string) uniqid();
     }
 
     /**
+     * Retrieve Encoder/Decoder object.
+     *
      * @return \Josser\Endec\JsonEndec
      */
     public function getEndec()
     {
         return $this->endec;
+    }
+
+    /**
+     * Check whether $request is a notification.
+     *
+     * @param \Josser\Client\Request\RequestInterface $request
+     * @return boolean
+     */
+    function isNotification(RequestInterface $request)
+    {
+        return $request->getId() === null;
     }
 }

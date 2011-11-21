@@ -11,46 +11,68 @@
 
 namespace Josser\Client\Request;
 
-use Josser\Exception\InvalidArgumentException;
-use Josser\Exception\BadMethodCallException;
-use Josser\Client\Request\Request;
-use Josser\Client\Protocol\ProtocolInterface;
+use Josser\Client\Request\RequestInterface;
 
 /**
  * JSON-RPC explicit notification object.
  *
  * @author Alan Gabriel Bem <alan.bem@gmail.com>
  */
-class Notification extends Request
+class Notification implements RequestInterface
 {
+    /**
+     * A string containing the name of the method to be invoked.
+     *
+     * @var string
+     */
+    private $method;
+
+    /**
+     * A Structured value that holds the parameter values to be used during the invocation of the method.
+     *
+     * @var array
+     */
+    private $params;
+
     /**
      * Constructor.
      *
      * @param string $method
-     * @param array|null $params
+     * @param array $params
      */
-    public function __construct($method, array $params = null)
+    public function __construct($method, array $params = array())
     {
-        parent::__construct($method, $params, null);
+        $this->method = $method;
+        $this->params = $params;
+    }
+
+    /**
+     * Get remote method name.
+     *
+     * @return string
+     */
+    public function getMethod()
+    {
+        return $this->method;
+    }
+
+    /**
+     * Get method parameters.
+     *
+     * @return array
+     */
+    public function getParams()
+    {
+        return $this->params;
     }
 
     /**
      * Get request id.
      *
-     * @return null|number|string
+     * @return null
      */
     public function getId()
     {
         return null;
-    }
-
-    /**
-     * Check whether $this request is a notification.
-     *
-     * @return bool
-     */
-    final public function isNotification()
-    {
-        return true;
     }
 }

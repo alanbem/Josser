@@ -11,10 +11,7 @@
 
 namespace Josser\Client\Request;
 
-use Josser\Exception\InvalidArgumentException;
-use Josser\Exception\BadMethodCallException;
 use Josser\Client\Request\RequestInterface;
-use Josser\Client\Protocol\ProtocolInterface;
 
 /**
  * JSON-RPC request object.
@@ -48,10 +45,10 @@ class Request implements RequestInterface
      * Constructor.
      *
      * @param string $method
-     * @param array|null $params
+     * @param array $params
      * @param mixed $id
      */
-    public function __construct($method, array $params = null, $id = null)
+    public function __construct($method, array $params = array(), $id)
     {
         $this->method = $method;
         $this->params = $params;
@@ -81,31 +78,10 @@ class Request implements RequestInterface
     /**
      * Get request id.
      *
-     * @return null|number|string
+     * @return mixed
      */
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Check whether $this request is a notification.
-     *
-     * @return bool
-     */
-    public function isNotification()
-    {
-        return null === $this->id;
-    }
-
-    /**
-     * Return DTO of $this request.
-     *
-     * @param \Josser\Client\Protocol\ProtocolInterface $protocol
-     * @return mixed
-     */
-    public function getDataTransferObject(ProtocolInterface $protocol)
-    {
-        return $protocol->getRequestDataTransferObject($this);
     }
 }

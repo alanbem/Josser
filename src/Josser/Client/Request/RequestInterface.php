@@ -36,25 +36,7 @@ interface RequestInterface
      * Get request id.
      *
      * @abstract
-     * @throws \Josser\Exception\BadMethodCallException
-     * @return null|number|string
-     */
-    public function getId();
-
-    /**
-     * Check whether remote call is a notification.
-     *
-     * @abstract
-     * @return bool
-     */
-    public function isNotification();
-
-    /**
-     * Return DTO of a request.
-     *
-     * @abstract
-     * @param \Josser\Client\Protocol\ProtocolInterface $protocol
      * @return mixed
      */
-    public function getDataTransferObject(ProtocolInterface $protocol);
+    public function getId();
 }

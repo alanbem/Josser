@@ -29,7 +29,6 @@ class NotificationTest extends JosserTestCase
      * @dataProvider notificationDataProvider
      * @covers \Josser\Client\Request\Notification::getMethod
      * @covers \Josser\Client\Request\Notification::getParams
-     * @covers \Josser\Client\Request\Notification::isNotification
      */
     public function testNotification($method, array $params)
     {
@@ -37,7 +36,6 @@ class NotificationTest extends JosserTestCase
 
         $this->assertEquals($method, $notification->getMethod());
         $this->assertEquals($params, $notification->getParams());
-        $this->assertTrue($notification->isNotification());
     }
 
     /**

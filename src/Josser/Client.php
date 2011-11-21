@@ -18,11 +18,11 @@ use Josser\Client\Response\NoResponse;
 use Josser\Protocol\JsonRpc2;
 use Josser\Client\Transport\TransportInterface;
 use Josser\Exception\RequestResponseMismatchException;
+use Josser\Client\Request\Request;
+use Josser\Client\Request\Notification;
 
 /**
  * JSON-RPC client.
- *
- * Default protocol is JSON-RPC 2.0
  *
  * @author Alan Gabriel Bem <alan.bem@gmail.com>
  */
@@ -33,14 +33,14 @@ class Client
      *
      * @var \Josser\Client\Transport\TransportInterface
      */
-    private $transport = null;
+    private $transport;
 
     /**
      * JSON-RPC protocol
      *
      * @var \Josser\Client\Protocol\ProtocolInterface
      */
-    private $protocol = null;
+    private $protocol;
 
     /**
      * Constructor.
@@ -48,12 +48,9 @@ class Client
      * @param \Josser\Client\Transport\TransportInterface $transport
      * @param \Josser\Client\Protocol\ProtocolInterface|null $protocol
      */
-    public function __construct(TransportInterface $transport, ProtocolInterface $protocol = null)
+    public function __construct(TransportInterface $transport, ProtocolInterface $protocol)
     {
         $this->transport = $transport;
-        if(null === $protocol) {
-            $protocol = new JsonRpc2;
-        }
         $this->protocol = $protocol;
     }
 
@@ -61,11 +58,11 @@ class Client
      * Alias of Client::request()
      *
      * @param string $method
-     * @param array|null $params
+     * @param array $params
      * @param mixed|null $id
      * @return mixed
      */
-    public function call($method, array $params = null, $id = null)
+    public function call($method, array $params = array(), $id = null)
     {
         return $this->request($method, $params, $id);
     }
@@ -78,13 +75,10 @@ class Client
      * @param mixed|null $id
      * @return mixed
      */
-    public function request($method, array $params = null, $id = null)
+    public function request($method, array $params = array(), $id = null)
     {
-        if(null === $params) {
-            $params = array();
-        }
-        $request = $this->protocol->createRequest($method, $params, $id);
-        $response = $this->send($request, $this->transport);
+        $request = new Request($method, $params, $id ?: $this->protocol->generateRequestId());
+        $response = self::send($request, $this->transport, $this->protocol);
         return $response->getResult();
     }
 
@@ -95,40 +89,38 @@ class Client
      * @param array $params
      * @return void
      */
-    public function notify($method, array $params)
+    public function notify($method, array $params = array())
     {
-        $notification = $this->protocol->createNotification($method, $params);
-        $this->send($notification, $this->transport);
+        $notification = new Notification($method, $params);
+        self::send($notification, $this->transport, $this->protocol);
     }
 
     /**
      * Execute JSON-RPC call.
      *
+     * @static
      * @throws \Josser\Exception\RequestResponseMismatchException
      * @param \Josser\Client\Request\RequestInterface $request
-     * @param \Josser\Client\Transport\TransportInterface|null $transport
+     * @param \Josser\Client\Transport\TransportInterface $transport
+     * @param \Josser\Client\Protocol\ProtocolInterface $protocol
      * @return \Josser\Client\Response\ResponseInterface
      */
-    public function send(RequestInterface $request, TransportInterface $transport = null)
+    public static function send(RequestInterface $request, TransportInterface $transport, ProtocolInterface $protocol)
     {
-        if(null === $transport) { // swap transport easily
-            $transport = $this->transport;
-        }
-
-        $this->protocol->validateRequest($request); // just in case
-        $dto = $this->protocol->getRequestDataTransferObject($request);
-        $requestJson = $this->protocol->getEndec()->encode($dto);
+        $protocol->validateRequest($request);
+        $dto = $protocol->getRequestDataTransferObject($request);
+        $requestJson = $protocol->getEndec()->encode($dto);
         $responseJson = $transport->send($requestJson);
 
-        if($request->isNotification()) {
+        if($protocol->isNotification($request)) {
             return new NoResponse();
         }
 
-        $responseDto = $this->protocol->getEndec()->decode($responseJson);
-        $this->protocol->validateResponseDataTransferObject($responseDto); // just in case
-        $response = $this->protocol->createResponse($responseDto);
+        $responseDto = $protocol->getEndec()->decode($responseJson);
+        $protocol->validateResponseDataTransferObject($responseDto);
+        $response = $protocol->createResponse($responseDto);
 
-        if(!$this->protocol->match($request, $response)) {
+        if(!$protocol->match($request, $response)) {
             throw new RequestResponseMismatchException($request, $response);
         }
 

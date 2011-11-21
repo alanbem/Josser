@@ -14,10 +14,10 @@ namespace Josser\Exception;
 use Josser\Exception\JosserException;
 
 /**
- * Bad method call exception.
+ * Invalid argument exception.
  *
  * @author Alan Gabriel Bem <alan.bem@gmail.com>
  */
-class BadMethodCallException extends \BadMethodCallException implements JosserException
+class InvalidRequestException extends \InvalidArgumentException implements JosserException
 {
 }
