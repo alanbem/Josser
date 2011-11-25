@@ -1,6 +1,8 @@
 Josser - JSON-RPC client for PHP 5.3
 ====================================
 
+[![Build Status](https://secure.travis-ci.org/alanbem/Josser.png?branch=master)](http://travis-ci.org/alanbem/Josser)
+
 JSON-RPC? What is it?
 ---------------------
 
