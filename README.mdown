@@ -113,6 +113,76 @@ try {
 }           
 ```
 
+Request objects
+---------------
+
+When you call remote procedures, those calls are internally translated into generic request objects.
+
+```php
+<?php
+
+namespace Josser;
+
+use Josser\Client;
+use Josser\Client\Request\Request;
+use Josser\Client\Request\Notification;
+
+// instantiate transport and protocol
+
+$client = new Client($transport, $protocol);
+$client->request('math.divide', array(1, 2));
+$client->notify('system.logout');
+
+// code above is equivalent of
+
+$request = new Request('math.divide', array(1, 2), 213123); // 213123 is a request identifier
+Client::send($request, $transport, $protocol);
+
+$notification = new Notification('system.logout');
+Client::send($notification, $transport, $protocol);
+```
+
+As you can see, you can work with those objects directly but downside of this approach is that you must provide your
+own id for every request. By default Client::request() generates this id for you on its own.
+Also remeber that Client::send() does not return result directly - it return response object instead. To get to
+underlying result data use Response::getResult() like this:
+
+```php
+<?php
+
+namespace Josser;
+
+use Josser\Client;
+use Josser\Client\Request\Request;
+use Josser\Client\Request\Notification;
+
+// instantiate transport and protocol
+
+$request = new Request('math.sum', array(2, 2), 6564653);
+$response = Client::send($request, $transport, $protocol);
+
+var_dump($response->getResult()); // int(4)
+```
+
+Notice the possibility of creating your own, project specific, request objects.
+
+```php
+<?php
+
+namespace MyProject\Request;
+
+use Josser\Client\Request\Request;
+
+class Divide extends Request
+{
+    public function __construct($divident, $divisor)
+    {
+        $requestId = uniqid(); // random request id
+        parent::__construct('math.divide', array($divident, $divisor), $requestId);
+    }
+}
+```
+
 Specialized clients
 -------------------
 
