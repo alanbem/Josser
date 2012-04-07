@@ -144,7 +144,7 @@ $notification = new Notification('system.logout');
 Client::send($notification, $transport, $protocol);
 ```
 
-As you can see, you can work with those objects directly but downside of this approach is that you must provide your
+As you can see, you can work with those low-level objects directly but downside of this approach is that you must provide your
 own id for every request. By default Client::request() generates this id for you on its own.
 Also remeber that Client::send() does not return result directly - it return response object instead. To get to
 underlying result data use Response::getResult() like this:
