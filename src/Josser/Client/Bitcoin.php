@@ -52,31 +52,6 @@ class Bitcoin extends Client
     }
 
     /**
-     * Builds http url.
-     *
-     * @static
-     * @param string $host
-     * @param string $user
-     * @param string $password
-     * @param int $port
-     * @param bool $isSecure    Indicates whether http or https protocol should be used.
-     * @return string
-     */
-    private static function buildUrl($host, $user, $password, $port, $isSecure)
-    {
-        if ((bool) $isSecure) {
-            $scheme = 'https';
-        } else {
-            $scheme = 'http';
-        }
-
-        $url = '%s://%s:%s@%s:%d';
-        $url = sprintf($url, $scheme, $user, $password, $host, $port);
-
-        return $url;
-    }
-
-    /**
      * Safely copies wallet.dat to $destination, which can be a directory or a path with filename.
      *
      * @param string $destination
