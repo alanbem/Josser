@@ -48,6 +48,53 @@ class HttpTransport implements TransportInterface
     }
 
     /**
+     * Factory method for creating http transport object.
+     *
+     * @static
+     *
+     * @param string $host
+     * @param string $user
+     * @param string $password
+     * @param int    $port
+     * @param bool   $isSecure    Whether secure connection should be used
+     *
+     * @return \Josser\Client\Transport\HttpTransport
+     */
+    public static function create($host, $user, $password, $port = 8332, $isSecure = false)
+    {
+        $url = self::buildUrl((string)$host, (string)$user, (string)$password, (integer)$port, (boolean)$isSecure);
+
+        return new HttpTransport($url);
+    }
+
+    /**
+     * Builds http url.
+     *
+     * @static
+     *
+     * @param string $host
+     * @param string $user
+     * @param string $password
+     * @param int    $port
+     * @param bool   $isSecure    Indicates whether http or https protocol should be used.
+     *
+     * @return string
+     */
+    private static function buildUrl($host, $user, $password, $port, $isSecure)
+    {
+        if ((bool) $isSecure) {
+            $scheme = 'https';
+        } else {
+            $scheme = 'http';
+        }
+
+        $url = '%s://%s:%s@%s:%d';
+        $url = sprintf($url, $scheme, $user, $password, $host, $port);
+
+        return $url;
+    }
+
+    /**
      * Get remote JSON-RPC service url.
      *
      * @return string

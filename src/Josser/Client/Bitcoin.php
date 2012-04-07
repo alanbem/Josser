@@ -46,9 +46,8 @@ class Bitcoin extends Client
      */
     public static function create($host, $user, $password, $port = 8332, $isSecure = false)
     {
-        $url = self::buildUrl((string) $host, (string) $user, (string) $password, (integer) $port, (boolean) $isSecure);
+        $transport = HttpTransport::create((string) $host, (string) $user, (string) $password, (integer) $port, (boolean) $isSecure);
 
-        $transport = new HttpTransport($url);
         return new Bitcoin($transport);
     }
 

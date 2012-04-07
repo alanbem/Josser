@@ -9,21 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace Josser\Tests\Client;
+namespace Josser\Tests\Transport;
 
 use Josser\Tests\TestCase as JosserTestCase;
-use Josser\Client\Bitcoin;
 use Josser\Client\Transport\HttpTransport;
 
 /**
- * Test class for Josser\Client\Bitcoin.
- *
- * todo: reuse HttpTransportTest::connectionsProvider() after fix of https://github.com/sebastianbergmann/phpunit/issues/529
+ * Test class for Josser\Transport\HttpTransport.
  */
-class BitcoinTest extends JosserTestCase
+class HttpTransportTest extends JosserTestCase
 {
     /**
-     * Test factory method of bitcoin client.
+     * Test factory method of http transport.
      *
      * @param string $host
      * @param string $user
@@ -33,14 +30,14 @@ class BitcoinTest extends JosserTestCase
      * @param string $url
      *
      * @dataProvider connectionsProvider
-     * @covers \Josser\Client\Bitcoin::create
+     * @covers \Josser\Transport\HttpTransport::create
      */
     public function testFactory($host, $user, $password, $port, $isSecure, $url)
     {
-        $client1 = new Bitcoin(new HttpTransport($url));
-        $client2 = Bitcoin::create($host, $user, $password, $port, $isSecure);
+        $transport1 = new HttpTransport($url);
+        $transport2 = HttpTransport::create($host, $user, $password, $port, $isSecure);
 
-        $this->assertEquals($client1, $client2);
+        $this->assertEquals($transport1, $transport2);
     }
 
     /**
