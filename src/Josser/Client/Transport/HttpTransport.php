@@ -11,6 +11,7 @@
 
 namespace Josser\Client\Transport;
 
+use Buzz\Browser;
 use Josser\Client\Transport\TransportInterface;
 use Josser\Exception\TransportFailureException;
 
@@ -29,22 +30,20 @@ class HttpTransport implements TransportInterface
     private $url;
 
     /**
-     * CURLOPT_VERBOSE
+     * Buzz http client.
      *
-     * @var bool
+     * @var \Buzz\Browser
      */
-    private $verbose = false;
+    private $browser;
 
     /**
      * Constructor.
      *
      * @param string $url
-     * @param bool $verbose
      */
-    public function __construct($url, $verbose = false)
+    public function __construct($url)
     {
         $this->url = $url;
-        $this->verbose = $verbose;
     }
 
     /**
@@ -95,6 +94,32 @@ class HttpTransport implements TransportInterface
     }
 
     /**
+     * Get Buzz http client.
+     *
+     * @return \Buzz\Browser
+     */
+    public function getBrowser()
+    {
+        if(!isset($this->browser)) {
+            $this->browser = new Browser();
+        }
+
+        return $this->browser;
+    }
+
+    /**
+     * Set Buzz http client.
+     *
+     * @param \Buzz\Browser $browser
+     * @return \Josser\Client\Transport\HttpTransport
+     */
+    public function setBrowser(Browser $browser)
+    {
+        $this->browser = $browser;
+        return $this;
+    }
+
+    /**
      * Get remote JSON-RPC service url.
      *
      * @return string
@@ -107,29 +132,19 @@ class HttpTransport implements TransportInterface
     /**
      * Send data to remote JSON-RPC service over HTTP.
      *
-     * @captains-log CURL is the most sufficient to this job. I've tried file_put_contents (with http stream context), but in case of an error I didn't get response with error object.
-     *
      * @throws \Josser\Exception\TransportFailureException
      * @param mixed $data
      * @return string
      */
     function send($data)
     {
-        $curl = curl_init($this->url);
-        
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        
-        curl_setopt($curl, CURLOPT_VERBOSE, $this->verbose);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-
-        $body = curl_exec($curl);
-        if (false === $body) {
+        try {
+            $headers = array('Content-Type: application/json');
+            $response = $this->browser->post($this->getUrl(), $headers, $data)->getContent();
+            return $response;
+        } catch (\Exception $e) {
             $error = sprintf('JSON-RPC http connection failed. Remote service at "%s" is not responding.', $this->url);
-            throw new TransportFailureException($error);
+            throw new TransportFailureException($error, null, $e);
         }
-        curl_close($curl);
-        return $body;
     }
 }
