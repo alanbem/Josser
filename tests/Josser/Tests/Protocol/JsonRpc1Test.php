@@ -19,7 +19,7 @@ use Josser\Client\Response\Response;
 use Josser\Exception\InvalidResponseException;
 
 /**
- * Test class for Josser\Endec\JsonEndec.
+ * Test class for Josser\Protocol\JsonRpc1.
  */
 class JsonRpc1Test extends JosserTestCase
 {
