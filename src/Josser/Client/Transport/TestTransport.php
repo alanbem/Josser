@@ -41,7 +41,7 @@ class TestTransport implements TransportInterface
      * Sets expected response body.
      *
      * @param $body
-     * @return \Josser\Client\Transport\NullTransport
+     * @return \Josser\Client\Transport\TestTransport
      */
     public function setBody($body)
     {
@@ -52,7 +52,7 @@ class TestTransport implements TransportInterface
     /**
      * Pretends to send data to remote service. Returns assigned response body.
      *
-     * @throws \Josser\Exception\TransportFailedException
+     * @throws \Josser\Exception\TransportFailureException
      * @param mixed $data
      * @return string
      */

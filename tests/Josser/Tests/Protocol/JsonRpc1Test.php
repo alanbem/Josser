@@ -106,10 +106,12 @@ class JsonRpc1Test extends JosserTestCase
      */
     public function testRequestResponseMatching($requestId, $responseId, $isMatch)
     {
+        /* @var $requestStub \Josser\Client\Request\RequestInterface */
         $requestStub = $this->getMockBuilder('Josser\Client\Request\Request')
                             ->disableOriginalConstructor()
                             ->setMethods(array('getId'))
                             ->getMock();
+        /* @var $responseStub \Josser\Client\Response\ResponseInterface */
         $requestStub->expects($this->once())
                     ->method('getId')
                     ->will($this->returnValue($requestId));

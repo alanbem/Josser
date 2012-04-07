@@ -21,7 +21,7 @@ interface TransportInterface
     /**
      * Send data to remote JSON-RPC service.
      *
-     * @throws \Josser\Exception\TransportFailedException
+     * @throws \Josser\Exception\TransportFailureException
      * @param mixed $data
      * @return string
      */

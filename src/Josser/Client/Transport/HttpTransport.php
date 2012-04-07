@@ -109,7 +109,7 @@ class HttpTransport implements TransportInterface
      *
      * @captains-log CURL is the most sufficient to this job. I've tried file_put_contents (with http stream context), but in case of an error I didn't get response with error object.
      *
-     * @throws \Josser\Exception\TransportFailedException
+     * @throws \Josser\Exception\TransportFailureException
      * @param mixed $data
      * @return string
      */
