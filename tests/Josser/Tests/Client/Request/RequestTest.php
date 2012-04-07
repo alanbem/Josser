@@ -25,7 +25,6 @@ class RequestTest extends JosserTestCase
      * @param string $method
      * @param array $params
      * @param mixed $id
-     * @param boolean $isNotification
      * @return void
      *
      * @dataProvider requestDataProvider
@@ -33,7 +32,7 @@ class RequestTest extends JosserTestCase
      * @covers \Josser\Client\Request\Request::getParams
      * @covers \Josser\Client\Request\Request::getId
      */
-    public function testRequest($method, array $params, $id, $isNotification)
+    public function testRequest($method, array $params, $id)
     {
         $request = new Request($method, $params, $id);
 
@@ -50,17 +49,14 @@ class RequestTest extends JosserTestCase
     public function requestDataProvider()
     {
         return array(
-            array('add', array(2, 2), 1, false),
-            array('echo', array('Hello world'), 2, false),
-            array('concat', array('Hello', ' ',  'world'), 3, false),
-            array('getnews', array(), 4, false),
-            array('add', array(2, 2), 'b286r', false),
-            array('echo', array('Hello world'), 'uiashd873', false),
-            array('concat', array('Hello', ' ',  'world'), 'n8923rra', false),
-            array('getnews', array(), 'ygnqnor', false),
-
-            array('logout', array(), null, true),
-            array('punch', array('user123'), null, true),
+            array('add', array(2, 2), 1),
+            array('echo', array('Hello world'), 2),
+            array('concat', array('Hello', ' ',  'world'), 3),
+            array('getnews', array(), 4),
+            array('add', array(2, 2), 'b286r'),
+            array('echo', array('Hello world'), 'uiashd873'),
+            array('concat', array('Hello', ' ',  'world'), 'n8923rra'),
+            array('getnews', array(), 'ygnqnor'),
         );
     }
 }
