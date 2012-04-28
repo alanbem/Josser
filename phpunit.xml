@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit bootstrap="vendor/.composer/autoload.php">
+<phpunit bootstrap="vendor/.composer/autoload.php" colors="true">
     <testsuites>
         <testsuite name="Josser Test Suite">
             <directory>tests/Josser/Tests</directory>
@@ -8,9 +8,8 @@
     </testsuites>
 
     <filter>
-        <blacklist>
-            <directory suffix=".php">tests</directory>
-            <directory suffix=".php">vendor</directory>
-        </blacklist>
+        <whitelist>
+            <directory suffix=".php">src/Josser</directory>
+        </whitelist>
     </filter>
 </phpunit>
