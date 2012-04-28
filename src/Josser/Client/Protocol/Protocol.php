@@ -13,14 +13,16 @@ namespace Josser\Client\Protocol;
 
 use Josser\Client\Response\ResponseInterface;
 use Josser\Client\Request\RequestInterface;
-use Josser\Endec\EndecInterface;
+
+use Symfony\Component\Serializer\Encoder\EncoderInterface;
+use Symfony\Component\Serializer\Encoder\DecoderInterface;
 
 /**
  * Protocol interface for Josser client.
  *
  * @author Alan Gabriel Bem <alan.bem@gmail.com>
  */
-interface ProtocolInterface
+interface Protocol
 {
     /**
      * Create response object.
@@ -32,12 +34,20 @@ interface ProtocolInterface
     function createResponse($dto);
 
     /**
-         * Retrieve Encoder/Decoder object.
+     * Retrieve encoder object.
      *
      * @abstract
-     * @return \Josser\Endec\EndecInterface
+     * @return \Symfony\Component\Serializer\Encoder\EncoderInterface
      */
-    function getEndec();
+    function getEncoder();
+
+    /**
+     * Retrieve decoder object.
+     *
+     * @abstract
+     * @return \Symfony\Component\Serializer\Encoder\DecoderInterface
+     */
+    function getDecoder();
 
     /**
      * Retrieve JSON-RPC version.

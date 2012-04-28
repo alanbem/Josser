@@ -33,7 +33,6 @@ class BitcoinTest extends JosserTestCase
      * @param string $url
      *
      * @dataProvider connectionsProvider
-     * @covers \Josser\Client\Bitcoin::create
      */
     public function testFactory($host, $user, $password, $port, $isSecure, $url)
     {

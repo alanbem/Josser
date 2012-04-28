@@ -13,7 +13,7 @@ namespace Josser;
 
 use Josser\Client\Request\RequestInterface;
 use Josser\Client\Response\ResponseInterface;
-use Josser\Client\Protocol\ProtocolInterface;
+use Josser\Client\Protocol\Protocol;
 use Josser\Client\Response\NoResponse;
 use Josser\Protocol\JsonRpc2;
 use Josser\Client\Transport\TransportInterface;
@@ -38,7 +38,7 @@ class Client
     /**
      * JSON-RPC protocol
      *
-     * @var \Josser\Client\Protocol\ProtocolInterface
+     * @var \Josser\Client\Protocol\Protocol
      */
     private $protocol;
 
@@ -46,9 +46,9 @@ class Client
      * Constructor.
      *
      * @param \Josser\Client\Transport\TransportInterface $transport
-     * @param \Josser\Client\Protocol\ProtocolInterface|null $protocol
+     * @param \Josser\Client\Protocol\Protocol|null $protocol
      */
-    public function __construct(TransportInterface $transport, ProtocolInterface $protocol)
+    public function __construct(TransportInterface $transport, Protocol $protocol)
     {
         $this->transport = $transport;
         $this->protocol = $protocol;
@@ -102,23 +102,23 @@ class Client
      * @throws \Josser\Exception\RequestResponseMismatchException
      * @param \Josser\Client\Request\RequestInterface $request
      * @param \Josser\Client\Transport\TransportInterface $transport
-     * @param \Josser\Client\Protocol\ProtocolInterface $protocol
+     * @param \Josser\Client\Protocol\Protocol $protocol
      * @return \Josser\Client\Response\ResponseInterface
      */
-    public static function send(RequestInterface $request, TransportInterface $transport, ProtocolInterface $protocol)
+    public static function send(RequestInterface $request, TransportInterface $transport, Protocol $protocol)
     {
         $protocol->validateRequest($request);
-        $dto = $protocol->getRequestDataTransferObject($request);
-        $requestJson = $protocol->getEndec()->encode($dto);
-        $responseJson = $transport->send($requestJson);
+        $requestDTO = $protocol->getRequestDataTransferObject($request);
+        $encodedRequest = $protocol->getEncoder()->encode($requestDTO, null);
+        $encodedResponse = $transport->send($encodedRequest);
 
         if($protocol->isNotification($request)) {
             return new NoResponse();
         }
 
-        $responseDto = $protocol->getEndec()->decode($responseJson);
-        $protocol->validateResponseDataTransferObject($responseDto);
-        $response = $protocol->createResponse($responseDto);
+        $responseDTO = $protocol->getDecoder()->decode($encodedResponse, null);
+        $protocol->validateResponseDataTransferObject($responseDTO);
+        $response = $protocol->createResponse($responseDTO);
 
         if(!$protocol->match($request, $response)) {
             throw new RequestResponseMismatchException($request, $response);

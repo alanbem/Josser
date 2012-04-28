@@ -12,7 +12,7 @@
 namespace Josser\Client\Response;
 
 use Josser\Client\Response\ResponseInterface;
-use Josser\Client\Protocol\ProtocolInterface;
+use Josser\Client\Protocol\Protocol;
 
 /**
  * JSON-RPC client response object.

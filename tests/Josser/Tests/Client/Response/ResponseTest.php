@@ -27,8 +27,6 @@ class ResponseTest extends JosserTestCase
      * @return void
      *
      * @dataProvider responseDataProvider
-     * @covers \Josser\Client\Response\Response::getResult
-     * @covers \Josser\Client\Response\Response::getId
      */
     public function testRequest($result, $id)
     {

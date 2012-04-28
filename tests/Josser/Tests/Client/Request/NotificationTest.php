@@ -27,8 +27,6 @@ class NotificationTest extends JosserTestCase
      * @return void
      *
      * @dataProvider notificationDataProvider
-     * @covers \Josser\Client\Request\Notification::getMethod
-     * @covers \Josser\Client\Request\Notification::getParams
      */
     public function testNotification($method, array $params)
     {

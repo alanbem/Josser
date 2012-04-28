@@ -8,8 +8,9 @@
     </testsuites>
 
     <filter>
-        <whitelist>
-            <directory suffix=".php">src/Josser/Tests</directory>
-        </whitelist>
+        <blacklist>
+            <directory suffix=".php">tests</directory>
+            <directory suffix=".php">vendor</directory>
+        </blacklist>
     </filter>
 </phpunit>

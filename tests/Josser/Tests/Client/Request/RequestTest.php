@@ -28,9 +28,6 @@ class RequestTest extends JosserTestCase
      * @return void
      *
      * @dataProvider requestDataProvider
-     * @covers \Josser\Client\Request\Request::getMethod
-     * @covers \Josser\Client\Request\Request::getParams
-     * @covers \Josser\Client\Request\Request::getId
      */
     public function testRequest($method, array $params, $id)
     {

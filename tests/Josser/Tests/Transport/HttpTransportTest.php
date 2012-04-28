@@ -30,7 +30,6 @@ class HttpTransportTest extends JosserTestCase
      * @param string $url
      *
      * @dataProvider connectionsProvider
-     * @covers \Josser\Transport\HttpTransport::create
      */
     public function testFactory($host, $user, $password, $port, $isSecure, $url)
     {

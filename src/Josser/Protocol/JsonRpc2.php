@@ -15,12 +15,12 @@ use Josser\Client\Response\ResponseInterface;
 use Josser\Client\Response\Response;
 use Josser\Client\Request\RequestInterface;
 use Josser\Client\Request\Request;
-use Josser\Endec\EndecInterface;
-use Josser\Endec\JsonEndec;
 use Josser\Exception\InvalidRequestException;
 use Josser\Exception\InvalidResponseException;
 use Josser\Exception\RpcFaultException;
 use Josser\Protocol\JsonRpc;
+
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
 /**
  * JSON-RPC 2.0 Protocol.
@@ -30,20 +30,6 @@ use Josser\Protocol\JsonRpc;
  */
 class JsonRpc2 extends JsonRpc
 {
-    /**
-     * Constructor.
-     *
-     * @param \Josser\Endec\EndecInterface|null $endec
-     */
-    public function __construct(EndecInterface $endec = null)
-    {
-        if(null === $endec)
-        {
-            $endec = new JsonEndec();
-        }
-        parent::__construct($endec);
-    }
-
     /**
      * Retrieve JSON-RPC version.
      *

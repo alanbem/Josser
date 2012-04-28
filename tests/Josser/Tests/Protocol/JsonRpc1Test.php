@@ -13,10 +13,11 @@ namespace Josser\Tests;
 
 use Josser\Tests\TestCase as JosserTestCase;
 use Josser\Protocol\JsonRpc1;
-use Josser\Endec\JsonEndec;
 use Josser\Client\Request\Request;
 use Josser\Client\Response\Response;
 use Josser\Exception\InvalidResponseException;
+
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
 /**
  * Test class for Josser\Protocol\JsonRpc1.
@@ -34,28 +35,46 @@ class JsonRpc1Test extends JosserTestCase
     }
 
     /**
-     * Default encoder/decoder for JsonRpc1 protocol is JsonEndec.
+     * Default encoder for JsonRpc1 protocol is JsonEncoder.
      *
      * @return void
      *
-     * @covers JsonEndec::getEndec
      */
     public function testIfDefaultEncoderIsJsonEncoder()
     {
-        $this->assertEquals(new JsonEndec, $this->protocol->getEndec());
+        $this->assertEquals(new JsonEncoder, $this->protocol->getEncoder());
+    }
+
+    /**
+     * Default decoder for JsonRpc1 protocol is JsonEncoder.
+     *
+     * @return void
+     */
+    public function testIfDefaultDecoderIsJsonEncoder()
+    {
+        $this->assertEquals(new JsonEncoder, $this->protocol->getDecoder());
     }
 
     /**
      * @return void
-     *
-     * @covers JsonEndec::getEndec
      */
-    public function testEndecRetrieval()
+    public function testEncoderRetrieval()
     {
-        $endec = new JsonEndec;
+        $endec = new JsonEncoder;
         $protocol = new JsonRpc1($endec);
 
-        $this->assertSame($endec, $protocol->getEndec());
+        $this->assertSame($endec, $protocol->getEncoder());
+    }
+
+    /**
+     * @return void
+     */
+    public function testDecoderRetrieval()
+    {
+        $endec = new JsonEncoder;
+        $protocol = new JsonRpc1($endec);
+
+        $this->assertSame($endec, $protocol->getDecoder());
     }
 
     /**
@@ -64,7 +83,6 @@ class JsonRpc1Test extends JosserTestCase
      * @return void
      *
      * @dataProvider responseDataProvider
-     * @covers Josser\Protocol\JsonRpc1::validateResponseDataTransferObject
      */
     public function testResponseValidation($responseDataTransferObject, $isValid)
     {
@@ -82,7 +100,6 @@ class JsonRpc1Test extends JosserTestCase
      * @return void
      *
      * @dataProvider validResponseDataProvider
-     * @covers Josser\Protocol\JsonRpc1::createResponse
      */
     public function testResponseFactory($responseDataTransferObject)
     {
@@ -102,7 +119,6 @@ class JsonRpc1Test extends JosserTestCase
      * @return void
      *
      * @dataProvider requestResponseMatchingDataProvider
-     * @covers Josser\Protocol\JsonRpc1::match
      */
     public function testRequestResponseMatching($requestId, $responseId, $isMatch)
     {

@@ -11,33 +11,38 @@
 
 namespace Josser\Protocol;
 
-use Josser\Client\Protocol\ProtocolInterface;
+use Josser\Protocol\Protocol;
 use Josser\Client\Request\RequestInterface;
 use Josser\Client\Request\Request;
 use Josser\Client\Request\Notification;
 use Josser\Client\Response\ResponseInterface;
 use Josser\Client\Response;
-use Josser\Endec\EndecInterface;
+
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
 /**
  * JSON-RPC protocol base class.
  *
  * @author Alan Gabriel Bem <alan.bem@gmail.com>
  */
-abstract class JsonRpc implements ProtocolInterface
+abstract class JsonRpc implements Protocol
 {
     /**
-     * @var \Josser\Endec\EndecInterface
+     * @var \Symfony\Component\Serializer\Encoder\JsonEncoder
      */
-    protected $endec;
+    private $endec;
 
     /**
      * Constructor.
      *
-     * @param \Josser\Endec\EndecInterface $endec
+     * @param \Symfony\Component\Serializer\Encoder\JsonEncoder $endec
      */
-    public function __construct(EndecInterface $endec)
+    public function __construct(JsonEncoder $endec = null)
     {
+        if(null === $endec)
+        {
+            $endec = new JsonEncoder();
+        }
         $this->endec = $endec;
     }
 
@@ -96,11 +101,21 @@ abstract class JsonRpc implements ProtocolInterface
     }
 
     /**
-     * Retrieve Encoder/Decoder object.
+     * Retrieve encoder object.
      *
-     * @return \Josser\Endec\JsonEndec
+     * @return \Symfony\Component\Serializer\Encoder\JsonEncoder
      */
-    public function getEndec()
+    public function getEncoder()
+    {
+        return $this->endec;
+    }
+
+    /**
+     * Retrieve decoder object.
+     *
+     * @return \Symfony\Component\Serializer\Encoder\JsonEncoder
+     */
+    public function getDecoder()
     {
         return $this->endec;
     }
