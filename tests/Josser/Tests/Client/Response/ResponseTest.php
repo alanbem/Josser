@@ -13,6 +13,7 @@ namespace Josser\Tests\Client\Response;
 
 use Josser\Tests\TestCase as JosserTestCase;
 use Josser\Client\Response\Response;
+use Josser\Client\Response\NoResponse;
 
 /**
  * Test class for Josser\Client\Response\Response.
@@ -34,6 +35,17 @@ class ResponseTest extends JosserTestCase
 
         $this->assertEquals($result, $response->getResult());
         $this->assertEquals($id, $response->getId());
+    }
+
+    /**
+     * Test no-response object.
+     */
+    public function testNoResponse()
+    {
+        $response = new NoResponse;
+
+        $this->assertNull($response->getId());
+        $this->assertNull($response->getResult());
     }
 
     /**

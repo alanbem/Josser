@@ -11,6 +11,10 @@
 
 namespace Josser\Tests\Transport;
 
+use Buzz\Browser;
+use Buzz\Message\Response;
+use Buzz\Message\Request;
+
 use Josser\Tests\TestCase as JosserTestCase;
 use Josser\Client\Transport\HttpTransport;
 
@@ -37,6 +41,70 @@ class HttpTransportTest extends JosserTestCase
         $transport2 = HttpTransport::create($host, $user, $password, $port, $isSecure);
 
         $this->assertEquals($transport1, $transport2);
+    }
+
+    /**
+     *
+     * Test getters of transport object.
+     */
+    public function testGetters()
+    {
+        $url = 'http://user:password@127.0.0.1:9000';
+
+        $transport = new HttpTransport($url);
+
+        $this->assertEquals($url, $transport->getUrl());
+        $this->assertInstanceOf('Buzz\Browser', $transport->getBrowser()); // default browser
+
+        $browser = new Browser;
+
+        $transport->setBrowser($browser);
+
+        $this->assertSame($browser, $transport->getBrowser());
+
+    }
+
+    public function testSend()
+    {
+        $url = 'http://user:password@127.0.0.1:9000';
+        $json = '[1,2]';
+
+        $response = new Response;
+        $response->setContent($json);
+
+        /* @var $browser \Buzz\Browser */
+        $browser = $this->getMock('Buzz\Browser', array('send'));
+        $browser->expects($this->once())
+            ->method('send')
+            ->will($this->returnValue($response));
+
+        $transport = new HttpTransport($url);
+        $transport->setBrowser($browser);
+
+        $result = $transport->send('[]');
+
+        $this->assertEquals($json, $result);
+    }
+
+    /**
+     * Test transport if there is no connection.
+     */
+    public function testNoConnection()
+    {
+        $url = 'http://user:password@127.0.0.1:9000';
+
+        /* @var $browser \Buzz\Browser */
+        $browser = $this->getMock('Buzz\Browser', array('send'));
+        $browser->expects($this->once())
+            ->method('send')
+            ->will($this->throwException(new \Exception));
+
+        $transport = new HttpTransport($url);
+        $transport->setBrowser($browser);
+
+        $this->setExpectedException('Josser\Exception\TransportFailureException');
+
+        $transport->send('[]');
     }
 
     /**

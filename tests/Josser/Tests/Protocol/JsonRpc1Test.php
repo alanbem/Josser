@@ -14,6 +14,8 @@ namespace Josser\Tests;
 use Josser\Tests\TestCase as JosserTestCase;
 use Josser\Protocol\JsonRpc1;
 use Josser\Client\Request\Request;
+use Josser\Client\Request\RequestInterface;
+use Josser\Client\Request\Notification;
 use Josser\Client\Response\Response;
 use Josser\Exception\InvalidResponseException;
 
@@ -145,6 +147,35 @@ class JsonRpc1Test extends JosserTestCase
     }
 
     /**
+     * @param \Josser\Client\Request\RequestInterface $request
+     * @param boolean $isNotification
+     *
+     * @dataProvider requestsAndNotificationsDataProvider
+     */
+    public function testIsNotification(RequestInterface $request, $isNotification)
+    {
+        $this->assertEquals($isNotification, $this->protocol->isNotification($request));
+    }
+
+    /**
+     * Test if protocol can generate unique request ids.
+     */
+    public function testGenerateRequestId()
+    {
+        $ids = array();
+
+        // check uniqueness on trial of 1000 generations
+        for ($i = 1; $i <= 1000; $i++) {
+            $id = $this->protocol->generateRequestId();
+
+            $this->assertNotNull($id);
+            $this->assertNotContains($id, $ids);
+
+            $ids[] = $id;
+        }
+    }
+
+    /**
      * Fixtures
      *
      * @return array
@@ -235,6 +266,15 @@ class JsonRpc1Test extends JosserTestCase
             array('asd', 'asd', true),
             array(1, 'asd', false),
             array('asd', 1, false),
+        );
+    }
+
+    public function requestsAndNotificationsDataProvider()
+    {
+        return array(
+            array(new Request('math.sum', array(1,2), 123324234), false),
+            array(new Request('system.exit', array(), null), true),
+            array(new Notification('system.exit', array(), null), true),
         );
     }
 }

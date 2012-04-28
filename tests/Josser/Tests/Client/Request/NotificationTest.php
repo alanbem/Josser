@@ -34,6 +34,7 @@ class NotificationTest extends JosserTestCase
 
         $this->assertEquals($method, $notification->getMethod());
         $this->assertEquals($params, $notification->getParams());
+        $this->assertNull($notification->getId());
     }
 
     /**
