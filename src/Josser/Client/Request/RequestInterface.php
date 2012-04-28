@@ -11,8 +11,6 @@
 
 namespace Josser\Client\Request;
 
-use Josser\Client\Protocol\Protocol;
-
 /**
  * JSON-RPC request interface.
  *
