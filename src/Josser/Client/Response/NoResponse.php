@@ -25,7 +25,7 @@ class NoResponse implements ResponseInterface
      *
      * @return mixed
      */
-    function getResult()
+    public function getResult()
     {
         return;
     }
@@ -35,7 +35,7 @@ class NoResponse implements ResponseInterface
      *
      * @return mixed
      */
-    function getId()
+    public function getId()
     {
         return;
     }
