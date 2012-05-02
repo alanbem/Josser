@@ -86,13 +86,9 @@ class JsonRpc1 extends JsonRpc
      * @param array $params
      * @return void
      */
-    private function validateRequestParams(array $params)
+    private function validateRequestParams($params)
     {
-        if(empty($params)) {
-            return ;
-        }
-
-        if(!$this->isIndexed($params)) {
+        if(!is_array($params) || (is_array($params) && !$this->isIndexed($params))) {
             $error = 'Invalid parameters structure. Parameters must be hold within indexed-only array.';
             throw new InvalidRequestException($error);
         }
@@ -107,8 +103,9 @@ class JsonRpc1 extends JsonRpc
      */
     private function validateRequestId($id)
     {
-        if(!is_string($id) && !is_numeric($id)) {
-            $error = sprintf('Invalid request id type. Request id must be string or numeric. Request id of %s type detected.', gettype($id));
+        // from spec: The request id. This can be of any type.
+        if(is_object($id)) {
+            $error = sprintf('Request id as object is not supported.', gettype($id));
             throw new InvalidRequestException($error);
         }
     }
@@ -124,12 +121,16 @@ class JsonRpc1 extends JsonRpc
     {
         $this->validateRequestMethod($request->getMethod());
         $this->validateRequestParams($request->getParams());
-        $this->validateRequestId($request->getId());
+        if (!$this->isNotification($request)) {
+            $this->validateRequestId($request->getId());
+        }
         return $request;
     }
 
     /**
      * Return DTO of a request.
+     *
+     * todo: implement JSON class hinting
      *
      * @param \Josser\Client\Request\RequestInterface $request
      * @return array

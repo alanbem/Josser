@@ -124,6 +124,37 @@ class JsonRpc1Test extends JosserTestCase
     }
 
     /**
+     * Test protocols' request DTO factory if valid request is provided.
+     *
+     * @param \Josser\Client\Request\RequestInterface $request
+     * @param array $expectedDataTransferObject
+     * @return void
+     *
+     * @dataProvider validRequestsDataProvider
+     */
+    public function testCreatingDTOFromValidRequest(RequestInterface $request, $expectedDataTransferObject)
+    {
+        $dataTransferObject = $this->protocol->getRequestDataTransferObject($request);
+
+        $this->assertEquals($expectedDataTransferObject, $dataTransferObject);
+    }
+
+    /**
+     * Test protocols' request DTO factory if invalid request is provided.
+     *
+     * @param \Josser\Client\Request\RequestInterface $request
+     * @return void
+     *
+     * @dataProvider invalidRequestsDataProvider
+     */
+    public function testCreatingDTOFromInvalidRequest(RequestInterface $request)
+    {
+        $this->setExpectedException('Josser\Exception\InvalidRequestException');
+
+        $this->protocol->getRequestDataTransferObject($request);
+    }
+
+    /**
      * @param mixed $requestId
      * @param mixed $responseId
      * @param boolean $isMatch
@@ -171,17 +202,9 @@ class JsonRpc1Test extends JosserTestCase
      */
     public function testGenerateRequestId()
     {
-        $ids = array();
+        $id = $this->protocol->generateRequestId();
 
-        // check uniqueness on trial of 1000 generations
-        for ($i = 1; $i <= 1000; $i++) {
-            $id = $this->protocol->generateRequestId();
-
-            $this->assertNotNull($id);
-            $this->assertNotContains($id, $ids);
-
-            $ids[] = $id;
-        }
+        $this->assertNotNull($id);
     }
 
     /**
@@ -247,6 +270,71 @@ class JsonRpc1Test extends JosserTestCase
      *
      * @return array
      */
+    public function validRequestsDataProvider()
+    {
+        return array(
+            array(new Request('math.sum', array(1,2), 123324234), array('method' => 'math.sum', 'params' => array(1,2), 'id' => 123324234)),
+            array(new Request('math.sum', array(1, 2), ''), array('method' => 'math.sum', 'params' => array(1,2), 'id' => '')), // invalid id
+            array(new Request('system.exit', array(), null), array('method' => 'system.exit', 'params' => array(), 'id' => null)),
+            array(new Notification('system.exit', array()), array('method' => 'system.exit', 'params' => array(), 'id' => null)),
+        );
+    }
+
+    /**
+     * Fixtures
+     *
+     * @return array
+     */
+    public function invalidRequestsDataProvider()
+    {
+        $mock = $this->getMock('Josser\Client\Request\RequestInterface');
+        $mock->expects($this->atLeastOnce())
+             ->method('getMethod')
+             ->will($this->returnValue('mocked.math.sum'));
+        $mock->expects($this->atLeastOnce())
+             ->method('getId')
+             ->will($this->returnValue(123324234));
+
+        $request1 = clone $mock;
+        $request1->expects($this->atLeastOnce())
+                ->method('getParams')
+                ->will($this->returnValue(''));
+
+        $request2 = clone $mock;
+        $request2->expects($this->atLeastOnce())
+                ->method('getParams')
+                ->will($this->returnValue(null));
+
+        $request3 = clone $mock;
+        $request3->expects($this->atLeastOnce())
+                ->method('getParams')
+                ->will($this->returnValue(new \stdClass));
+
+        return array(
+            // invalid methods
+            //array(new Request('', array(), 123324234)), // todo: check if empty string is valid method
+            array(new Request(null, array(), 123324234)), // invalid method
+            array(new Request(new \stdClass, array(), 123324234)), // invalid method
+            // invalid id
+            array(new Request('math.sum', array(1, 2), new \stdClass)), // invalid id, objects are not yet supported
+            // invalid params
+            array(new Request('math.sum', array('foo' => 'bar'), 123324234)), // invalid params
+            array(new Request('math.sum', array('foo' => 'bar', 'bar' => 'foo'), 123324234)), // invalid params
+            array(new Request('system.exit', array('foo' => 'bar'), null)), // notification with invalid params
+            array(new Request('system.exit', array('foo' => 'bar', 'bar' => 'foo'), null)), // notification with invalid params
+            array(new Notification('system.exit', array('foo' => 'bar'))), // notification with invalid params
+            array(new Notification('system.exit', array('foo' => 'bar', 'bar' => 'foo'))), // notification with invalid params
+            array($request1),
+            array($request2),
+            array($request3),
+        );
+    }
+
+    /**
+     * Fixtures
+     *
+     * @return array
+     */
     public function requestResponseMatchingDataProvider()
     {
         return array(
@@ -257,12 +345,17 @@ class JsonRpc1Test extends JosserTestCase
         );
     }
 
+    /**
+     * Fixtures
+     *
+     * @return array
+     */
     public function requestsAndNotificationsDataProvider()
     {
         return array(
             array(new Request('math.sum', array(1,2), 123324234), false),
             array(new Request('system.exit', array(), null), true),
-            array(new Notification('system.exit', array(), null), true),
+            array(new Notification('system.exit', array()), true),
         );
     }
 }
