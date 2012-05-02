@@ -85,18 +85,27 @@ class JsonRpc1Test extends JosserTestCase
      * @param mixed $responseDataTransferObject
      * @return void
      *
-     * @dataProvider validResponseDataProvider
+     * @dataProvider validResponseDTOsWithoutRpcErrorDataProvider
      */
-    public function testCreatingResponseFromValidDTOs($responseDataTransferObject)
+    public function testCreatingResponseFromValidDtoWithoutRpcError($responseDataTransferObject)
     {
-        try {
+        $response = $this->protocol->createResponse($responseDataTransferObject);
+        $this->assertInstanceOf('Josser\Client\Response\ResponseInterface', $response);
+    }
 
-            $response = $this->protocol->createResponse($responseDataTransferObject);
-            $this->assertInstanceOf('Josser\Client\Response\ResponseInterface', $response);
+    /**
+     * Test protocols' response objects factory and its RPC fault detection if invalid DTO is provided.
+     *
+     * @param mixed $responseDataTransferObject
+     * @return void
+     *
+     * @dataProvider validResponseDTOsWithRpcErrorDataProvider
+     */
+    public function testCreatingResponseFromValidDtoWithRpcError($responseDataTransferObject)
+    {
+        $this->setExpectedException('Josser\Exception\RpcFaultException');
 
-        } catch (\Exception $e) {
-            $this->assertInstanceOf('Josser\Exception\RpcFaultException', $e);
-        }
+        $this->protocol->createResponse($responseDataTransferObject);
     }
 
     /**
@@ -105,7 +114,7 @@ class JsonRpc1Test extends JosserTestCase
      * @param mixed $responseDataTransferObject
      * @return void
      *
-     * @dataProvider invalidResponseDataProvider
+     * @dataProvider invalidResponseDTOsDataProvider
      */
     public function testCreatingResponseFromInvalidDTOs($responseDataTransferObject)
     {
@@ -180,16 +189,27 @@ class JsonRpc1Test extends JosserTestCase
      *
      * @return array
      */
-    protected function getValidResponseDTOs()
+    public function validResponseDTOsWithoutRpcErrorDataProvider()
     {
         return array(
-            array('result' => 'Hello JSON-RPC', 'error' => null, 'id' => 1),
-            array('result' => null, 'error' => array('message' => 'Error message', 'code' => 1000), 'id' => 1), // RPC error
-            array('result' => 'Hello JSON-RPC', 'error' => null, 'id' => null), // notification
-            array('result' => 'Hello JSON-RPC', 'error' => null, 'id' => "h312g48t3iuhr8"),
-            array('result' => 43534, 'error' => null, 'id' => 1),
-            array('result' => 0.1, 'error' => null, 'id' => 1),
-            array('result' => array('Hello' => 'World'), 'error' => null, 'id' => 1),
+            array(array('result' => 'Hello JSON-RPC', 'error' => null, 'id' => 1)),
+            array(array('result' => 'Hello JSON-RPC', 'error' => null, 'id' => null)), // notification
+            array(array('result' => 'Hello JSON-RPC', 'error' => null, 'id' => "h312g48t3iuhr8")),
+            array(array('result' => 43534, 'error' => null, 'id' => 1)),
+            array(array('result' => 0.1, 'error' => null, 'id' => 1)),
+            array(array('result' => array('Hello' => 'World'), 'error' => null, 'id' => 1)),
+        );
+    }
+
+    /**
+     * Fixtures
+     *
+     * @return array
+     */
+    public function validResponseDTOsWithRpcErrorDataProvider()
+    {
+        return array(
+            array(array('result' => null, 'error' => array('message' => 'Error message', 'code' => 1000), 'id' => 1)), // RPC error
         );
     }
 
@@ -198,61 +218,28 @@ class JsonRpc1Test extends JosserTestCase
      *
      * @return array
      */
-    protected function getInvalidResponseDTOs()
+    public function invalidResponseDTOsDataProvider()
     {
         return array(
-            array('result' => 'Hello JSON-RPC', 'error' => null), // id missing
-            array('result' => 'Hello JSON-RPC','id' => 1), // error missing
-            array('error' => null, 'id' => 1), // result missing
-            array('result' => null, 'error' => null, 'id' => 1), // result is null & error is null
-            array('result' => null, 'error' => array('code' => 1000), 'id' => 1), // error message missing
-            array('result' => null, 'error' => array('message' => 'Error message'), 'id' => 1), // error code missing
-            array('result' => null, 'error' => array('message' => 'Error message', 'code' => "iashdausgd"), 'id' => 1), // code is not an integer
-            array('result' => null, 'error' => array('message' => 'Error message', 'code' => array('error' => 'code')), 'id' => 1), // code is not an integer
-            array('result' => null, 'error' => array('message' => 324234, 'code' => 1000), 'id' => 1), // error message is not a string
-            array('result' => null, 'error' => array('message' => array('error' => 'message'), 'code' => 1000), 'id' => 1), // error message is not a string
-            array('result' => null, 'error' => 345, 'id' => 1), // error is not an array
-            array('result' => null, 'error' => "asdasr245", 'id' => 1), // error is not an array
-            array('result' => null, 'error' => array("error"), 'id' => 1), // error is not an array
-            array('result' => null, 'error' => array("error"), 'id' => new \stdClass), // id is not int, string or null
-            4, // response id not an array
-            '4dsf', // response is not an array
-            new \stdClass, // response is empty array/object
-            array(), // response is empty array
+            array(array('result' => 'Hello JSON-RPC', 'error' => null)), // id missing
+            array(array('result' => 'Hello JSON-RPC','id' => 1)), // error missing
+            array(array('error' => null, 'id' => 1)), // result missing
+            array(array('result' => null, 'error' => null, 'id' => 1)), // result is null & error is null
+            array(array('result' => null, 'error' => array('code' => 1000), 'id' => 1)), // error message missing
+            array(array('result' => null, 'error' => array('message' => 'Error message'), 'id' => 1)), // error code missing
+            array(array('result' => null, 'error' => array('message' => 'Error message', 'code' => "iashdausgd"), 'id' => 1)), // code is not an integer
+            array(array('result' => null, 'error' => array('message' => 'Error message', 'code' => array('error' => 'code')), 'id' => 1)), // code is not an integer
+            array(array('result' => null, 'error' => array('message' => 324234, 'code' => 1000), 'id' => 1)), // error message is not a string
+            array(array('result' => null, 'error' => array('message' => array('error' => 'message'), 'code' => 1000), 'id' => 1)), // error message is not a string
+            array(array('result' => null, 'error' => 345, 'id' => 1)), // error is not an array
+            array(array('result' => null, 'error' => "asdasr245", 'id' => 1)), // error is not an array
+            array(array('result' => null, 'error' => array("error"), 'id' => 1)), // error is not an array
+            array(array('result' => null, 'error' => array("error"), 'id' => new \stdClass)), // id is not int, string or null
+            array(4), // response id not an array
+            array('4dsf'), // response is not an array
+            array(new \stdClass), // response is empty array/object
+            array(array()), // response is empty array
         );
-    }
-
-    /**
-     * Test data.
-     *
-     * @return array
-     */
-    public function validResponseDataProvider()
-    {
-        $responses = array();
-        foreach($this->getValidResponseDTOs() as $response) {
-            $responses[] = array($response, true);
-        }
-        return $responses;
-    }
-
-    /**
-     * Test data.
-     *
-     * @return array
-     */
-    public function invalidResponseDataProvider()
-    {
-        $responses = array();
-        foreach($this->getInvalidResponseDTOs() as $response) {
-            $responses[] = array($response, false);
-        }
-        return $responses;
-    }
-
-    public function responseDataProvider()
-    {
-        return array_merge($this->validResponseDataProvider(), $this->invalidResponseDataProvider());
     }
 
     /**
