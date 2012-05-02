@@ -43,8 +43,9 @@ class JsonRpc2 extends JsonRpc
     /**
      * Create response object.
      *
+     * @throws \Josser\Exception\RpcFaultException
      * @param mixed $dto
-     * @return \Josser\Client\Response\ResponseInterface
+     * @return \Josser\Client\Response\Response
      */
     public function createResponse($dto)
     {
@@ -152,7 +153,7 @@ class JsonRpc2 extends JsonRpc
     /**
      * Validate response DTO.
      *
-     * @throws \Josser\Exception\RpcFaultException
+     * @throws \Josser\Exception\InvalidResponseException
      * @param mixed $dto
      * @return void
      */

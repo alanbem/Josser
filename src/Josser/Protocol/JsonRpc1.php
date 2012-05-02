@@ -43,6 +43,7 @@ class JsonRpc1 extends JsonRpc
     /**
      * Create response object.
      *
+     * @throws \Josser\Exception\RpcFaultException
      * @param mixed $dto
      * @return \Josser\Client\Response\ResponseInterface
      */
