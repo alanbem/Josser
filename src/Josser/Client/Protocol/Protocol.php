@@ -50,14 +50,6 @@ interface Protocol
     function getDecoder();
 
     /**
-     * Retrieve JSON-RPC version.
-     *
-     * @abstract
-     * @return string
-     */
-    function getVersion();
-
-    /**
      * Checks whether request matches response.
      *
      * @abstract

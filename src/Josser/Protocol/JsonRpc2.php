@@ -31,16 +31,6 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 class JsonRpc2 extends JsonRpc
 {
     /**
-     * Retrieve JSON-RPC version.
-     *
-     * @return string
-     */
-    public function getVersion()
-    {
-       return '2.0';
-    }
-
-    /**
      * Create response object.
      *
      * @throws \Josser\Exception\RpcFaultException
