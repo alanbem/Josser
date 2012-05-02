@@ -66,12 +66,7 @@ abstract class JsonRpc implements Protocol
      */
     protected function isIndexed(array $array)
     {
-        foreach ($array as $key => $value) {
-            if (!is_integer($key)) {
-                return false;
-            }
-        }
-        return true;
+        return (count(array_filter(array_keys($array), 'is_integer')) == count($array));
     }
 
     /**
@@ -82,12 +77,7 @@ abstract class JsonRpc implements Protocol
      */
     protected function isAssociative(array $array)
     {
-        foreach ($array as $key => $value) {
-            if (!is_string($key)) {
-                return false;
-            }
-        }
-        return true;
+        return (count(array_filter(array_keys($array), 'is_string')) == count($array));
     }
 
     /**
