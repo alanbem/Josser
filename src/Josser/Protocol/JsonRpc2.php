@@ -76,13 +76,9 @@ class JsonRpc2 extends JsonRpc
      * @param array $params
      * @return void
      */
-    private function validateRequestParams(array $params)
+    private function validateRequestParams($params)
     {
-        if(empty($params)) {
-            return ;
-        }
-
-        if(!$this->isIndexed($params) && !$this->isAssociative($params)) {
+        if(!is_array($params) || !(is_array($params) && ($this->isIndexed($params) || $this->isAssociative($params)))) {
             $error = 'Invalid parameters structure. Parameters must be hold within indexed-only or associative-only array. Mixed array of parameters detected.';
             throw new InvalidRequestException($error);
         }
@@ -113,7 +109,9 @@ class JsonRpc2 extends JsonRpc
     {
         $this->validateRequestMethod($request->getMethod());
         $this->validateRequestParams($request->getParams());
-        $this->validateRequestId($request->getId());
+        if (!$this->isNotification($request)) {
+            $this->validateRequestId($request->getId());
+        }
         return $request;
     }
 
@@ -222,8 +220,8 @@ class JsonRpc2 extends JsonRpc
      */
     private function validateResponseDataTransferObjectId($id)
     {
-        if(!is_int($id) && !is_null($id)) {
-            $error = sprintf('Invalid response id type. Response id must be string or null. Response id of %s type detected.', gettype($id));
+        if(!is_string($id) && !is_numeric($id)) {
+            $error = sprintf('Invalid request id type. Request id must be string or numeric. Request id of %s type detected.', gettype($id));
             throw new InvalidResponseException($error);
         }
     }

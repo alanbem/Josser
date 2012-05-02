@@ -194,7 +194,7 @@ class JsonRpc1 extends JsonRpc
      */
     private function validateResponseDataTransferObjectId($id)
     {
-        if(!is_string($id) && !is_int($id) && !is_null($id)) {
+        if(is_object($id)) {
             $error = sprintf('Invalid response id type. Response id must be integer, string or null. Response id of %s type detected.', gettype($id));
             throw new InvalidResponseException($error);
         }

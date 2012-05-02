@@ -67,7 +67,7 @@ abstract class JsonRpc implements Protocol
     protected function isIndexed(array $array)
     {
         foreach ($array as $key => $value) {
-            if (!is_numeric($key)) {
+            if (!is_integer($key)) {
                 return false;
             }
         }
