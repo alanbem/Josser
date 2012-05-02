@@ -131,11 +131,8 @@ class JsonRpc1 extends JsonRpc
 
         $dto = array();
         $dto['method'] = $request->getMethod();
-        if(null !== $request->getParams()) {
-            $dto['params'] = $request->getParams();
-        } else {
-            $dto['params'] = array();
-        }
+        $dto['params'] = $request->getParams();
+
         if(!$this->isNotification($request)) {
             $dto['id'] = $request->getId();
         } else {
