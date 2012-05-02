@@ -68,15 +68,6 @@ interface Protocol
     function match(RequestInterface $request, ResponseInterface $response);
 
     /**
-     * Validate $request object.
-     *
-     * @abstract
-     * @param \Josser\Client\Request\RequestInterface $request
-     * @return \Josser\Client\Request\RequestInterface
-     */
-    function validateRequest(RequestInterface $request);
-
-    /**
      * Return DTO of a request.
      *
      * @abstract
@@ -84,16 +75,6 @@ interface Protocol
      * @return mixed
      */
     function getRequestDataTransferObject(RequestInterface $request);
-
-    /**
-     * Validate response DTO.
-     *
-     * @abstract
-     * @throws \Josser\Exception\RpcFaultException
-     * @param mixed $dto
-     * @return void
-     */
-    function validateResponseDataTransferObject($dto);
 
     /**
      * Check whether $request is a notification.

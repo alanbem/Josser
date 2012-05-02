@@ -118,7 +118,7 @@ class JsonRpc2 extends JsonRpc
      * @param \Josser\Client\Request\RequestInterface $request
      * @return \Josser\Client\Request\RequestInterface
      */
-    public function validateRequest(RequestInterface $request)
+    private function validateRequest(RequestInterface $request)
     {
         $this->validateRequestMethod($request->getMethod());
         $this->validateRequestParams($request->getParams());
@@ -156,7 +156,7 @@ class JsonRpc2 extends JsonRpc
      * @param mixed $dto
      * @return void
      */
-    public function validateResponseDataTransferObject($dto)
+    private function validateResponseDataTransferObject($dto)
     {
         if(!is_array($dto) && !is_object($dto)) {
             $error = "Incorrect response type detected. An array or object expected.";

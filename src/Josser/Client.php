@@ -107,7 +107,6 @@ class Client
      */
     public static function send(RequestInterface $request, TransportInterface $transport, Protocol $protocol)
     {
-        $protocol->validateRequest($request);
         $requestDTO = $protocol->getRequestDataTransferObject($request);
         $encodedRequest = $protocol->getEncoder()->encode($requestDTO, null);
         $encodedResponse = $transport->send($encodedRequest);
@@ -117,7 +116,6 @@ class Client
         }
 
         $responseDTO = $protocol->getDecoder()->decode($encodedResponse, null);
-        $protocol->validateResponseDataTransferObject($responseDTO);
         $response = $protocol->createResponse($responseDTO);
 
         if(!$protocol->match($request, $response)) {

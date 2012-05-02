@@ -80,38 +80,38 @@ class JsonRpc1Test extends JosserTestCase
     }
 
     /**
-     * @param mixed $responseDataTransferObject
-     * @param boolean $isValid
-     * @return void
-     *
-     * @dataProvider responseDataProvider
-     */
-    public function testResponseValidation($responseDataTransferObject, $isValid)
-    {
-        if(false == $isValid) {
-            $this->setExpectedException("Josser\Exception\InvalidResponseException");
-        }
-
-        $this->protocol->validateResponseDataTransferObject($responseDataTransferObject);
-    }
-
-    /**
-     * Test protocols' response objects factory and its RPC fault detection.
+     * Test protocols' response objects factory and its RPC fault detection if invalid DTO is provided.
      *
      * @param mixed $responseDataTransferObject
      * @return void
      *
      * @dataProvider validResponseDataProvider
      */
-    public function testResponseFactory($responseDataTransferObject)
+    public function testCreatingResponseFromValidDTOs($responseDataTransferObject)
     {
-        if(null !== $responseDataTransferObject['error']) { // response is valid, but rpc error has been sent
-            $this->setExpectedException("Josser\Exception\RpcFaultException");
+        try {
+
+            $response = $this->protocol->createResponse($responseDataTransferObject);
+            $this->assertInstanceOf('Josser\Client\Response\ResponseInterface', $response);
+
+        } catch (\Exception $e) {
+            $this->assertInstanceOf('Josser\Exception\RpcFaultException', $e);
         }
+    }
 
-        $response = $this->protocol->createResponse($responseDataTransferObject);
+    /**
+     * Test protocols' response objects factory if invalid DTO is provided.
+     *
+     * @param mixed $responseDataTransferObject
+     * @return void
+     *
+     * @dataProvider invalidResponseDataProvider
+     */
+    public function testCreatingResponseFromInvalidDTOs($responseDataTransferObject)
+    {
+        $this->setExpectedException('Josser\Exception\InvalidResponseException');
 
-        $this->assertInstanceOf('Josser\Client\Response\ResponseInterface', $response);
+        $this->protocol->createResponse($responseDataTransferObject);
     }
 
     /**
@@ -214,10 +214,11 @@ class JsonRpc1Test extends JosserTestCase
             array('result' => null, 'error' => 345, 'id' => 1), // error is not an array
             array('result' => null, 'error' => "asdasr245", 'id' => 1), // error is not an array
             array('result' => null, 'error' => array("error"), 'id' => 1), // error is not an array
-            array(4), // response id not an array
-            array('4dsf'), // response is not an array
-            array(new \stdClass), // response is empty array/object
-            array(array()), // response is empty array
+            array('result' => null, 'error' => array("error"), 'id' => new \stdClass), // id is not int, string or null
+            4, // response id not an array
+            '4dsf', // response is not an array
+            new \stdClass, // response is empty array/object
+            array(), // response is empty array
         );
     }
 
