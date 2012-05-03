@@ -285,6 +285,9 @@ class JsonRpc2Test extends JosserTestCase
             array(new Notification('system.logout', array('message' => 'Bye bye')), array('jsonrpc' => '2.0', 'method' => 'system.logout', 'params' => array('message' => 'Bye bye'))),
             array(new Request('system.logout', array('message' => 'Bye bye', 'send_to' => 'user123'), null), array('jsonrpc' => '2.0', 'method' => 'system.logout', 'params' => array('message' => 'Bye bye', 'send_to' => 'user123'))),
             array(new Notification('system.logout', array('message' => 'Bye bye', 'send_to' => 'user123')), array('jsonrpc' => '2.0', 'method' => 'system.logout', 'params' => array('message' => 'Bye bye', 'send_to' => 'user123'))),
+            array(new Request('math.sum', array(0 => 1, 1 => 2), 123324234), array('jsonrpc' => '2.0', 'method' => 'math.sum', 'params' => array(1,2), 'id' => 123324234)),
+            array(new Request('string.concat', array(0 => 'foo', 1 => 'bar'), null), array('jsonrpc' => '2.0', 'method' => 'string.concat', 'params' => array('foo', 'bar'))),
+            array(new Notification('string.concat', array(0 => 'foo', 1 => 'bar')), array('jsonrpc' => '2.0', 'method' => 'string.concat', 'params' => array('foo', 'bar'))),
         );
     }
 
@@ -329,6 +332,9 @@ class JsonRpc2Test extends JosserTestCase
             array($request1),
             array($request2),
             array($request3),
+            array(new Request('string.concat', array(0 => 'bar', 2 => 'foo'), 123324234)), // invalid params
+            array(new Request('string.concat', array(0 => 'bar', 2 => 'foo'), null)), // notification with invalid params
+            array(new Notification('string.concat', array(0 => 'bar', 2 => 'foo'))), // notification with invalid params
         );
     }
 

@@ -277,6 +277,9 @@ class JsonRpc1Test extends JosserTestCase
             array(new Request('math.sum', array(1, 2), ''), array('method' => 'math.sum', 'params' => array(1,2), 'id' => '')), // invalid id
             array(new Request('system.exit', array(), null), array('method' => 'system.exit', 'params' => array(), 'id' => null)),
             array(new Notification('system.exit', array()), array('method' => 'system.exit', 'params' => array(), 'id' => null)),
+            array(new Request('math.sum', array(0 => 1, 1 => 2), 123324234), array('method' => 'math.sum', 'params' => array(1,2), 'id' => 123324234)),
+            array(new Request('string.concat', array(0 => 'foo', 1 => 'bar'), null), array('method' => 'string.concat', 'params' => array('foo', 'bar'), 'id' => '')),
+            array(new Notification('string.concat', array(0 => 'foo', 1 => 'bar')), array('method' => 'string.concat', 'params' => array('foo', 'bar'), 'id' => null)),
         );
     }
 
@@ -327,6 +330,9 @@ class JsonRpc1Test extends JosserTestCase
             array($request1),
             array($request2),
             array($request3),
+            array(new Request('string.concat', array(0 => 'bar', 2 => 'foo'), 123324234)), // invalid params
+            array(new Request('string.concat', array(0 => 'bar', 2 => 'foo'), null)), // notification with invalid params
+            array(new Notification('string.concat', array(0 => 'bar', 2 => 'foo'))), // notification with invalid params
         );
     }
 
