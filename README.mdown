@@ -13,7 +13,7 @@ Which specification of JSON-RPC does Josser support?
 ----------------------------------------------------
 
 Josser supports [JSON-RPC 1.0] (http://json-rpc.org/wiki/specification) and
-[revised JSON-RPC 2.0] (http://groups.google.com/group/json-rpc/web/json-rpc-2-0). Unfortunately only client-server
+[revised JSON-RPC 2.0] (http://www.jsonrpc.org/specification). Unfortunately only client-server
 connections are possible with Josser - albeit JSON-RPC 1.0 was designed as P2P - due to PHP limitations.
 
 It is worth to mention that Josser's architecture allows to plug your own JSON-RPC flavours or implement existing
