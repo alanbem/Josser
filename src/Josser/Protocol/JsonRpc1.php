@@ -136,7 +136,7 @@ class JsonRpc1 extends JsonRpc
         if(!$this->isNotification($request)) {
             $dto['id'] = $request->getId();
         } else {
-            $dto['id'] = null; 
+            $dto['id'] = null;
         }
         return $dto;
     }
@@ -216,7 +216,7 @@ class JsonRpc1 extends JsonRpc
             throw new InvalidResponseException($error);
         }
         $rpcError = (array) $rpcError;
-        
+
         if(!array_key_exists('code', $rpcError)) {
             $error = 'Response error code is not defined.';
             throw new InvalidResponseException($error);

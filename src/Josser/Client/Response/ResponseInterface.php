@@ -24,7 +24,7 @@ interface ResponseInterface
      * @abstract
      * @return mixed
      */
-    function getResult();
+    public function getResult();
 
     /**
      * Get response id.
@@ -32,5 +32,5 @@ interface ResponseInterface
      * @abstract
      * @return mixed
      */
-    function getId();
+    public function getId();
 }

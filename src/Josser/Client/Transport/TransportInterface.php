@@ -25,5 +25,5 @@ interface TransportInterface
      * @param mixed $data
      * @return string
      */
-    function send($data);
+    public function send($data);
 }

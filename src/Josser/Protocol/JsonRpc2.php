@@ -238,7 +238,7 @@ class JsonRpc2 extends JsonRpc
             throw new InvalidResponseException($error);
         }
         $rpcError = (array) $rpcError;
-        
+
         if(!array_key_exists('code', $rpcError)) {
             $error = 'Response error code is not defined.';
             throw new InvalidResponseException($error);

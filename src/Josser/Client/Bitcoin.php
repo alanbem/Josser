@@ -267,7 +267,7 @@ class Bitcoin extends Client
 
     /**
      * Return information about bitcoin $address.
-     * 
+     *
      * @param string $address
      * @return array
      */
@@ -275,7 +275,7 @@ class Bitcoin extends Client
     {
         return $this->request('validateaddress', array($address));
     }
-    
+
     /**
      * Checks whether bitcoin $address is valid.
      *

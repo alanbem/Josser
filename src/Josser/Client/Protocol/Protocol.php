@@ -31,7 +31,7 @@ interface Protocol
      * @param mixed $dto
      * @return \Josser\Client\Response\ResponseInterface
      */
-    function createResponse($dto);
+    public function createResponse($dto);
 
     /**
      * Retrieve encoder object.
@@ -39,7 +39,7 @@ interface Protocol
      * @abstract
      * @return \Symfony\Component\Serializer\Encoder\EncoderInterface
      */
-    function getEncoder();
+    public function getEncoder();
 
     /**
      * Retrieve decoder object.
@@ -47,7 +47,7 @@ interface Protocol
      * @abstract
      * @return \Symfony\Component\Serializer\Encoder\DecoderInterface
      */
-    function getDecoder();
+    public function getDecoder();
 
     /**
      * Checks whether request matches response.
@@ -57,7 +57,7 @@ interface Protocol
      * @param \Josser\Client\Response\ResponseInterface $response
      * @return boolean
      */
-    function match(RequestInterface $request, ResponseInterface $response);
+    public function match(RequestInterface $request, ResponseInterface $response);
 
     /**
      * Return DTO of a request.
@@ -66,7 +66,7 @@ interface Protocol
      * @param \Josser\Client\Request\RequestInterface $request
      * @return mixed
      */
-    function getRequestDataTransferObject(RequestInterface $request);
+    public function getRequestDataTransferObject(RequestInterface $request);
 
     /**
      * Check whether $request is a notification.
@@ -75,7 +75,7 @@ interface Protocol
      * @param \Josser\Client\Request\RequestInterface $request
      * @return boolean
      */
-    function isNotification(RequestInterface $request);
+    public function isNotification(RequestInterface $request);
 
     /**
      * Generate random string for a response identifier.
@@ -83,5 +83,5 @@ interface Protocol
      * @abstract
      * @return mixed
      */
-    function generateRequestId();
+    public function generateRequestId();
 }

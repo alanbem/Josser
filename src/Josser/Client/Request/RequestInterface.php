@@ -29,7 +29,7 @@ interface RequestInterface
      * @return array
      */
     public function getParams();
-    
+
     /**
      * Get request id.
      *

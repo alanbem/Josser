@@ -24,7 +24,7 @@ class HttpTransport implements TransportInterface
 {
     /**
      * Remote JSON-RPC service.
-     * 
+     *
      * @var string
      */
     private $url;
@@ -136,7 +136,7 @@ class HttpTransport implements TransportInterface
      * @param mixed $data
      * @return string
      */
-    function send($data)
+    public function send($data)
     {
         try {
             $headers = array('Content-Type: application/json');

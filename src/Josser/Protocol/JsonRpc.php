@@ -39,8 +39,7 @@ abstract class JsonRpc implements Protocol
      */
     public function __construct(JsonEncoder $endec = null)
     {
-        if(null === $endec)
-        {
+        if(null === $endec) {
             $endec = new JsonEncoder();
         }
         $this->endec = $endec;
@@ -53,7 +52,7 @@ abstract class JsonRpc implements Protocol
      * @param \Josser\Client\Response\ResponseInterface $response
      * @return boolean
      */
-    function match(RequestInterface $request, ResponseInterface $response)
+    public function match(RequestInterface $request, ResponseInterface $response)
     {
         return (boolean) ($request->getId() == $response->getId());
     }
@@ -128,7 +127,7 @@ abstract class JsonRpc implements Protocol
      * @param \Josser\Client\Request\RequestInterface $request
      * @return boolean
      */
-    function isNotification(RequestInterface $request)
+    public function isNotification(RequestInterface $request)
     {
         return $request->getId() === null;
     }
