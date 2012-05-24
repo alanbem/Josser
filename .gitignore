@@ -1,4 +1,5 @@
 .idea/
 vendor/
+.DS_Store
 composer.phar
 php-cs-fixer.phar
