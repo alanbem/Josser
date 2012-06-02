@@ -138,10 +138,10 @@ $client->notify('system.logout');
 // code above is equivalent of
 
 $request = new Request('math.divide', array(1, 2), 213123); // 213123 is a request identifier
-Client::send($request, $transport, $protocol);
+$client->send($request);
 
 $notification = new Notification('system.logout');
-Client::send($notification, $transport, $protocol);
+$client->send($notification);
 ```
 
 As you can see, you can work with those low-level objects directly but downside of this approach is that you must provide your
@@ -158,10 +158,10 @@ use Josser\Client;
 use Josser\Client\Request\Request;
 use Josser\Client\Request\Notification;
 
-// instantiate transport and protocol
+// instantiate client
 
 $request = new Request('math.sum', array(2, 2), 6564653);
-$response = Client::send($request, $transport, $protocol);
+$response = $client->send($request);
 
 var_dump($response->getResult()); // int(4)
 ```
