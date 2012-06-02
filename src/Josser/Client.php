@@ -55,19 +55,6 @@ class Client
     }
 
     /**
-     * Alias of Client::request()
-     *
-     * @param string $method
-     * @param array $params
-     * @param mixed|null $id
-     * @return mixed
-     */
-    public function call($method, array $params = array(), $id = null)
-    {
-        return $this->request($method, $params, $id);
-    }
-
-    /**
      * Send request.
      *
      * @param string $method
@@ -78,7 +65,7 @@ class Client
     public function request($method, array $params = array(), $id = null)
     {
         $request = new Request($method, $params, $id ?: $this->protocol->generateRequestId());
-        $response = $this->send($request, $this->transport, $this->protocol);
+        $response = $this->call($request, $this->transport, $this->protocol);
         return $response->getResult();
     }
 
@@ -92,7 +79,7 @@ class Client
     public function notify($method, array $params = array())
     {
         $notification = new Notification($method, $params);
-        $this->send($notification, $this->transport, $this->protocol);
+        $this->call($notification, $this->transport, $this->protocol);
     }
 
     /**
@@ -104,7 +91,7 @@ class Client
      * @param \Josser\Client\Protocol\Protocol|null $protocol
      * @return \Josser\Client\Response\ResponseInterface
      */
-    public function send(RequestInterface $request, TransportInterface $transport = null, Protocol $protocol = null)
+    public function call(RequestInterface $request, TransportInterface $transport = null, Protocol $protocol = null)
     {
         // allow transport switching
         if (null === $transport) {

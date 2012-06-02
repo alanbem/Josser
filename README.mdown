@@ -138,15 +138,15 @@ $client->notify('system.logout');
 // code above is equivalent of
 
 $request = new Request('math.divide', array(1, 2), 213123); // 213123 is a request identifier
-$client->send($request);
+$client->call($request);
 
 $notification = new Notification('system.logout');
-$client->send($notification);
+$client->call($notification);
 ```
 
 As you can see, you can work with those low-level objects directly but downside of this approach is that you must provide your
 own id for every request. By default Client::request() generates this id for you on its own.
-Also remember that Client::send() does not return result directly - it return response object instead. To get to
+Also remember that Client::call() does not return result directly - it return response object instead. To get to
 underlying result data use Response::getResult() like this:
 
 ```php
@@ -161,7 +161,7 @@ use Josser\Client\Request\Notification;
 // instantiate client
 
 $request = new Request('math.sum', array(2, 2), 6564653);
-$response = $client->send($request);
+$response = $client->call($request);
 
 var_dump($response->getResult()); // int(4)
 ```
