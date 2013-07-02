@@ -229,4 +229,4 @@ Alan Gabriel Bem - <alan.bem@gmail.com>
 License
 -------
 
-Josser is licensed under the BSD License - see the LICENSE file for details
+Josser is licensed under the MIT License - see the LICENSE file for details
