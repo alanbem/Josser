@@ -11,8 +11,7 @@
 
 namespace Josser\Client\Transport;
 
-use Buzz\Browser;
-use Josser\Client\Transport\TransportInterface;
+use GuzzleHttp\Client;
 use Josser\Exception\TransportFailureException;
 
 /**
@@ -23,110 +22,26 @@ use Josser\Exception\TransportFailureException;
 class HttpTransport implements TransportInterface
 {
     /**
-     * Remote JSON-RPC service.
+     * Guzzle http client.
      *
-     * @var string
+     * @var Client
      */
-    private $url;
+    private $guzzle;
 
     /**
-     * Buzz http client.
-     *
-     * @var \Buzz\Browser
+     * @param Client $guzzle
      */
-    private $browser;
-
-    /**
-     * Constructor.
-     *
-     * @param string $url
-     */
-    public function __construct($url)
+    public function __construct(Client $guzzle)
     {
-        $this->url = $url;
+        $this->guzzle = $guzzle;
     }
 
     /**
-     * Factory method for creating http transport object.
-     *
-     * @static
-     *
-     * @param string $host
-     * @param string $user
-     * @param string $password
-     * @param int    $port
-     * @param bool   $isSecure    Whether secure connection should be used
-     *
-     * @return \Josser\Client\Transport\HttpTransport
+     * @return Client
      */
-    public static function create($host, $user, $password, $port = 8332, $isSecure = false)
+    public function getGuzzle()
     {
-        $url = self::buildUrl((string)$host, (string)$user, (string)$password, (integer)$port, (boolean)$isSecure);
-
-        return new HttpTransport($url);
-    }
-
-    /**
-     * Builds http url.
-     *
-     * @static
-     *
-     * @param string $host
-     * @param string $user
-     * @param string $password
-     * @param int    $port
-     * @param bool   $isSecure    Indicates whether http or https protocol should be used.
-     *
-     * @return string
-     */
-    private static function buildUrl($host, $user, $password, $port, $isSecure)
-    {
-        if ((bool) $isSecure) {
-            $scheme = 'https';
-        } else {
-            $scheme = 'http';
-        }
-
-        $url = '%s://%s:%s@%s:%d';
-        $url = sprintf($url, $scheme, $user, $password, $host, $port);
-
-        return $url;
-    }
-
-    /**
-     * Get Buzz http client.
-     *
-     * @return \Buzz\Browser
-     */
-    public function getBrowser()
-    {
-        if(!isset($this->browser)) {
-            $this->browser = new Browser();
-        }
-
-        return $this->browser;
-    }
-
-    /**
-     * Set Buzz http client.
-     *
-     * @param \Buzz\Browser $browser
-     * @return \Josser\Client\Transport\HttpTransport
-     */
-    public function setBrowser(Browser $browser)
-    {
-        $this->browser = $browser;
-        return $this;
-    }
-
-    /**
-     * Get remote JSON-RPC service url.
-     *
-     * @return string
-     */
-    public function getUrl()
-    {
-        return $this->url;
+        return $this->guzzle;
     }
 
     /**
@@ -139,11 +54,15 @@ class HttpTransport implements TransportInterface
     public function send($data)
     {
         try {
-            $headers = array('Content-Type: application/json');
-            $response = $this->browser->post($this->getUrl(), $headers, $data)->getContent();
-            return $response;
+            $response = $this->guzzle->request('POST', null, [
+                'body' => $data,
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ]
+            ]);
+            return $response->getBody()->getContents();
         } catch (\Exception $e) {
-            $error = sprintf('JSON-RPC http connection failed. Remote service at "%s" is not responding.', $this->url);
+            $error = sprintf('JSON-RPC http connection failed. Remote service at "%s" is not responding.', $this->guzzle->getConfig('base_uri'));
             throw new TransportFailureException($error, null, $e);
         }
     }

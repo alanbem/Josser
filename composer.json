@@ -1,8 +1,8 @@
 {
-    "name": "alanbem/josser",
-    "description": "JSON-RPC client for PHP 5.3 or higher",
-    "keywords": ["json-rpc", "rpc", "json", "client"],
-    "homepage": "http://github.com/alanbem/Josser",
+    "name": "jsonrpc/client",
+    "description": "JSON-RPC client for PHP",
+    "keywords": ["json-rpc", "jsonrpc", "rpc", "json", "client"],
+    "homepage": "http://github.com/jsonrpcphp/client",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -12,14 +12,19 @@
         }
     ],
     "require": {
-        "php": ">=5.3.2",
-        "symfony/serializer": "2.0.*",
-        "kriswallsmith/buzz": "dev-master"
+        "php": ">=5.5.0",
+        "guzzlehttp/guzzle": "^6.0",
+        "symfony/serializer": "^2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.0"
     },
     "autoload": {
         "psr-0": {
             "Josser": ["src/", "tests/"]
         }
     },
-    "target-dir": "vendor/"
+    "config": {
+        "bin-dir": "bin"
+    }
 }

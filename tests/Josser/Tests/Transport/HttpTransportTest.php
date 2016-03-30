@@ -11,10 +11,12 @@
 
 namespace Josser\Tests\Transport;
 
-use Buzz\Browser;
-use Buzz\Message\Response;
-use Buzz\Message\Request;
-
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use Josser\Tests\TestCase as JosserTestCase;
 use Josser\Client\Transport\HttpTransport;
 
@@ -24,66 +26,31 @@ use Josser\Client\Transport\HttpTransport;
 class HttpTransportTest extends JosserTestCase
 {
     /**
-     * Test factory method of http transport.
-     *
-     * @param string $host
-     * @param string $user
-     * @param string $password
-     * @param int $port
-     * @param bool $isSecure
-     * @param string $url
-     *
-     * @dataProvider connectionsProvider
-     */
-    public function testFactory($host, $user, $password, $port, $isSecure, $url)
-    {
-        $transport1 = new HttpTransport($url);
-        $transport2 = HttpTransport::create($host, $user, $password, $port, $isSecure);
-
-        $this->assertEquals($transport1, $transport2);
-    }
-
-    /**
      *
      * Test getters of transport object.
      */
     public function testGetters()
     {
-        $url = 'http://user:password@127.0.0.1:9000';
+        $guzzle    = $this->getMock(Client::class);
+        $transport = new HttpTransport($guzzle);
 
-        $transport = new HttpTransport($url);
-
-        $this->assertEquals($url, $transport->getUrl());
-        $this->assertInstanceOf('Buzz\Browser', $transport->getBrowser()); // default browser
-
-        $browser = new Browser;
-
-        $transport->setBrowser($browser);
-
-        $this->assertSame($browser, $transport->getBrowser());
-
+        $this->assertSame($guzzle, $transport->getGuzzle());
     }
 
     public function testSend()
     {
-        $url = 'http://user:password@127.0.0.1:9000';
-        $json = '[1,2]';
+        $mock = new MockHandler([
+            new Response(200, [], '1'),
+        ]);
 
-        $response = new Response;
-        $response->setContent($json);
+        $handler = HandlerStack::create($mock);
+        $guzzle = new Client(['handler' => $handler]);
 
-        /* @var $browser \Buzz\Browser */
-        $browser = $this->getMock('Buzz\Browser', array('send'));
-        $browser->expects($this->once())
-            ->method('send')
-            ->will($this->returnValue($response));
-
-        $transport = new HttpTransport($url);
-        $transport->setBrowser($browser);
+        $transport = new HttpTransport($guzzle);
 
         $result = $transport->send('[]');
 
-        $this->assertEquals($json, $result);
+        $this->assertEquals('1', $result);
     }
 
     /**
@@ -91,16 +58,14 @@ class HttpTransportTest extends JosserTestCase
      */
     public function testNoConnection()
     {
-        $url = 'http://user:password@127.0.0.1:9000';
+        $mock = new MockHandler([
+            new RequestException("Error Communicating with Server", new Request('GET', 'test'))
+        ]);
 
-        /* @var $browser \Buzz\Browser */
-        $browser = $this->getMock('Buzz\Browser', array('send'));
-        $browser->expects($this->once())
-            ->method('send')
-            ->will($this->throwException(new \Exception));
+        $handler = HandlerStack::create($mock);
+        $guzzle = new Client(['handler' => $handler]);
 
-        $transport = new HttpTransport($url);
-        $transport->setBrowser($browser);
+        $transport = new HttpTransport($guzzle);
 
         $this->setExpectedException('Josser\Exception\TransportFailureException');
 
