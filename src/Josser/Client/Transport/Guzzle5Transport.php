@@ -15,11 +15,11 @@ use GuzzleHttp\Client;
 use Josser\Exception\TransportFailureException;
 
 /**
- * JSON-RPC http transport.
+ * JSON-RPC http transport with Guzzle 5.
  *
  * @author Alan Gabriel Bem <alan.bem@gmail.com>
  */
-class HttpTransport implements TransportInterface
+class Guzzle5Transport implements TransportInterface
 {
     /**
      * Guzzle http client.
@@ -54,7 +54,7 @@ class HttpTransport implements TransportInterface
     public function send($data)
     {
         try {
-            $response = $this->guzzle->request('POST', null, [
+            $response = $this->guzzle->post(null, [
                 'body' => $data,
                 'headers' => [
                     'Content-Type' => 'application/json',
@@ -62,7 +62,7 @@ class HttpTransport implements TransportInterface
             ]);
             return $response->getBody()->getContents();
         } catch (\Exception $e) {
-            $error = sprintf('JSON-RPC http connection failed. Remote service at "%s" is not responding.', $this->guzzle->getConfig('base_uri'));
+            $error = sprintf('JSON-RPC http connection failed. Remote service at "%s" is not responding.', $this->guzzle->getBaseUrl());
             throw new TransportFailureException($error, null, $e);
         }
     }
