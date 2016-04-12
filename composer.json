@@ -1,5 +1,5 @@
 {
-    "name": "jsonrpc/client",
+    "name": "alanbem/josser",
     "description": "JSON-RPC client for PHP",
     "keywords": ["json-rpc", "jsonrpc", "rpc", "json", "client"],
     "homepage": "http://github.com/jsonrpcphp/client",
