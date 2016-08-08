@@ -42,6 +42,7 @@ class JsonRpc1 extends JsonRpc
         $this->validateResponseDataTransferObject($dto);
 
         if(isset($dto['error'])) {
+            // TODO: every protocol has its own exceptions, do not reuse exception between protocols
             throw new RpcFaultException($dto['error']['message']);
         }
 
