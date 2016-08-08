@@ -11,8 +11,6 @@
 
 namespace Josser\Exception;
 
-use Josser\Exception\JosserException;
-
 /**
  * RPC fault exception.
  *
@@ -20,9 +18,23 @@ use Josser\Exception\JosserException;
  */
 class RpcFaultException extends \RuntimeException implements JosserException
 {
-    public function __construct($message, $code = null, $previous = null)
+    /**
+     * @var mixed
+     */
+    private $data;
+
+    public function __construct($message, $code = 0, $data = null, \Exception $previous = null)
     {
-        $message = 'RPC fault: ' . $message;
+        $this->data = $data;
+
         parent::__construct($message, $code, $previous);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getData()
+    {
+        return $this->data;
     }
 }

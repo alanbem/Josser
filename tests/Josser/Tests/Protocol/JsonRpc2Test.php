@@ -11,6 +11,7 @@
 
 namespace Josser\Tests;
 
+use Josser\Exception\RpcFaultException;
 use Josser\Tests\TestCase as JosserTestCase;
 use Josser\Protocol\JsonRpc2;
 use Josser\Client\Request\Request;
@@ -97,15 +98,23 @@ class JsonRpc2Test extends JosserTestCase
      * Test protocols' response objects factory and its RPC fault detection if invalid DTO is provided.
      *
      * @param mixed $responseDataTransferObject
+     * @param mixed $message
+     * @param mixed $code
+     * @param mixed $data
      * @return void
      *
      * @dataProvider validResponseDTOsWithRpcErrorDataProvider
      */
-    public function testCreatingResponseFromValidDtoWithRpcError($responseDataTransferObject)
+    public function testCreatingResponseFromValidDtoWithRpcError($responseDataTransferObject, $message, $code, $data)
     {
-        $this->setExpectedException('Josser\Exception\RpcFaultException');
+        $this->setExpectedException('Josser\Exception\RpcFaultException', $message, $code);
 
-        $this->protocol->createResponse($responseDataTransferObject);
+        try {
+            $this->protocol->createResponse($responseDataTransferObject);
+        } catch (RpcFaultException $e) {
+            $this->assertEquals($data, $e->getData());
+            throw $e;
+        }
     }
 
     /**
@@ -231,7 +240,11 @@ class JsonRpc2Test extends JosserTestCase
     public function validResponseDTOsWithRpcErrorDataProvider()
     {
         return array(
-            array(array('jsonrpc' => '2.0', 'error' => array('message' => 'Error message', 'code' => 1000), 'id' => 1)), // RPC error
+            array(array('jsonrpc' => '2.0', 'error' => array('message' => 'Error message', 'code' => 1000), 'id' => 1), 'Error message', 1000, null),
+            array(array('jsonrpc' => '2.0', 'error' => array('message' => 'Error message', 'code' => 1000, 'data' => 1), 'id' => 1), 'Error message', 1000, 1),
+            array(array('jsonrpc' => '2.0', 'error' => array('message' => 'Error message', 'code' => 1000, 'data' => '1'), 'id' => 1), 'Error message', 1000, '1'),
+            array(array('jsonrpc' => '2.0', 'error' => array('message' => 'Error message', 'code' => 1000, 'data' => []), 'id' => 1), 'Error message', 1000, []),
+            array(array('jsonrpc' => '2.0', 'error' => array('message' => 'Error message', 'code' => 1000, 'data' => ['error' => 'error']), 'id' => 1), 'Error message', 1000, ['error' => 'error']),
         );
     }
 

@@ -42,7 +42,13 @@ class JsonRpc2 extends JsonRpc
         $this->validateResponseDataTransferObject($dto);
 
         if(isset($dto['error'])) {
-            throw new RpcFaultException($dto['error']['message'], $dto['error']['code']);
+            $message = $dto['error']['message'];
+            $code = $dto['error']['code'];
+            $data = null;
+            if (true === isset($dto['error']['data'])) {
+                $data = $dto['error']['data'];
+            }
+            throw new RpcFaultException($message, $code, $data);
         }
 
         $result = $dto['result'];
@@ -257,6 +263,7 @@ class JsonRpc2 extends JsonRpc
             throw new InvalidResponseException($error);
         }
 
+        // TODO: validate that error object has only code, message and ?data fields
         // TODO: validate optional 'data' attribute
     }
 }
