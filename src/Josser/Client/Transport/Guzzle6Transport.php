@@ -60,7 +60,7 @@ class Guzzle6Transport implements TransportInterface
                     'Content-Type' => 'application/json',
                 ]
             ]);
-            return $response->getBody()->getContents();
+            return (string) $response->getBody();
         } catch (\Exception $e) {
             $error = sprintf('JSON-RPC http connection failed. Remote service at "%s" is not responding.', $this->guzzle->getConfig('base_uri'));
             throw new TransportFailureException($error, null, $e);
