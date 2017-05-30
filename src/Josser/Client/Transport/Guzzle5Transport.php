@@ -29,11 +29,20 @@ class Guzzle5Transport implements TransportInterface
     private $guzzle;
 
     /**
-     * @param Client $guzzle
+     * URI of the web service, or null to use the base_uri of the Guzzle http client.
+     *
+     * @var string|null
      */
-    public function __construct(Client $guzzle)
+    private $uri;
+
+    /**
+     * @param Client $guzzle
+     * @param string|null $uri URL of the web service, or null to use the base_uri of $guzzle
+     */
+    public function __construct(Client $guzzle, $uri = null)
     {
         $this->guzzle = $guzzle;
+        $this->uri = $uri;
     }
 
     /**
@@ -54,7 +63,7 @@ class Guzzle5Transport implements TransportInterface
     public function send($data)
     {
         try {
-            $response = $this->guzzle->post(null, [
+            $response = $this->guzzle->post($this->uri, [
                 'body' => $data,
                 'headers' => [
                     'Content-Type' => 'application/json',
