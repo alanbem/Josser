@@ -40,7 +40,7 @@ Invoking remote methods is fairly simple:
 namespace Josser;
 
 use GuzzleHttp\Client;
-use Josser\Transport\HttpTransport;
+use Josser\Client\Transport\Guzzle6Transport as HttpTransport; // there is also guzzle 5 implementation available
 use Josser\Protocol\JsonRpc1;
 
 $guzzle    = new Client(['base_uri' => 'http://user:password@your-service.com/math:8888']); // http client
