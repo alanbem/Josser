@@ -29,17 +29,17 @@ class ClientTest extends JosserTestCase
     public function testRequest($requestMethod, $requestParameters, $responseResult)
     {
         /* @var $transport \Josser\Client\Transport\TransportInterface */
-        $transport = $this->getMock('Josser\Client\Transport\TransportInterface');
+        $transport = $this->getMockBuilder(Client\Transport\TransportInterface::class)->getMockForAbstractClass();
         /* @var $protocol \Josser\Protocol\Protocol */
-        $protocol  = $this->getMock('Josser\Client\Protocol\Protocol');
+        $protocol  = $this->getMockBuilder(Client\Protocol\Protocol::class)->getMockForAbstractClass();
         /* @var $response \Josser\Client\Response\ResponseInterface */
-        $response = $this->getMock('Josser\Client\Response\ResponseInterface');
+        $response = $this->getMockBuilder(Client\Response\ResponseInterface::class)->getMockForAbstractClass();
         $response->expects($this->any())
                  ->method('getResult')
                  ->will($this->returnValue($responseResult));
 
         /* @var $client \Josser\Client */
-        $client = $this->getMock('Josser\Client', array('call'), array($transport, $protocol));
+        $client = $this->getMockBuilder(Client::class)->setConstructorArgs([$transport, $protocol])->setMethods(['call'])->getMock();
         $client->expects($this->once())
                ->method('call')
                ->with(
@@ -64,17 +64,17 @@ class ClientTest extends JosserTestCase
     public function testNotify($requestMethod, $requestParameters, $responseResult)
     {
         /* @var $transport \Josser\Client\Transport\TransportInterface */
-        $transport = $this->getMock('Josser\Client\Transport\TransportInterface');
+        $transport = $this->getMockBuilder(Client\Transport\TransportInterface::class)->getMockForAbstractClass();
         /* @var $protocol \Josser\Protocol\Protocol */
-        $protocol  = $this->getMock('Josser\Client\Protocol\Protocol');
+        $protocol  = $this->getMockBuilder(Client\Protocol\Protocol::class)->getMockForAbstractClass();
         /* @var $response \Josser\Client\Response\ResponseInterface */
-        $response = $this->getMock('Josser\Client\Response\ResponseInterface');
+        $response = $this->getMockBuilder(Client\Response\ResponseInterface::class)->getMockForAbstractClass();
         $response->expects($this->any())
                  ->method('getResult')
                  ->will($this->returnValue($responseResult));
 
         /* @var $client \Josser\Client */
-        $client = $this->getMock('Josser\Client', array('call'), array($transport, $protocol));
+        $client = $this->getMockBuilder(Client::class)->setConstructorArgs([$transport, $protocol])->setMethods(['call'])->getMock();
         $client->expects($this->once())
                ->method('call')
                ->with(

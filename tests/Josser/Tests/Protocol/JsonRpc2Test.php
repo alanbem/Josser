@@ -311,11 +311,11 @@ class JsonRpc2Test extends JosserTestCase
      */
     public function invalidRequestsDataProvider()
     {
-        $mock = $this->getMock('Josser\Client\Request\RequestInterface');
-        $mock->expects($this->atLeastOnce())
+        $mock = $this->getMockBuilder(RequestInterface::class)->getMockForAbstractClass();
+        $mock->expects($this->any())
              ->method('getMethod')
              ->will($this->returnValue('mocked.math.sum'));
-        $mock->expects($this->atLeastOnce())
+        $mock->expects($this->any())
              ->method('getId')
              ->will($this->returnValue(123324234));
 
