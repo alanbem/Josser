@@ -103,7 +103,7 @@ class JsonRpc1Test extends JosserTestCase
      */
     public function testCreatingResponseFromValidDtoWithRpcError($responseDataTransferObject)
     {
-        $this->setExpectedException('Josser\Exception\RpcFaultException');
+        $this->expectException('Josser\Exception\RpcFaultException');
 
         $this->protocol->createResponse($responseDataTransferObject);
     }
@@ -118,7 +118,7 @@ class JsonRpc1Test extends JosserTestCase
      */
     public function testCreatingResponseFromInvalidDTOs($responseDataTransferObject)
     {
-        $this->setExpectedException('Josser\Exception\InvalidResponseException');
+        $this->expectException('Josser\Exception\InvalidResponseException');
 
         $this->protocol->createResponse($responseDataTransferObject);
     }
@@ -149,7 +149,7 @@ class JsonRpc1Test extends JosserTestCase
      */
     public function testCreatingDTOFromInvalidRequest(RequestInterface $request)
     {
-        $this->setExpectedException('Josser\Exception\InvalidRequestException');
+        $this->expectException('Josser\Exception\InvalidRequestException');
 
         $this->protocol->getRequestDataTransferObject($request);
     }

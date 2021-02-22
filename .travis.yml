@@ -3,14 +3,17 @@ dist: trusty
 language: php
 
 php:
-  - 5.6
-  - 7.0
   - 7.1
   - 7.2
   - 7.3
+  - 7.4
+
+env:
+  global:
+    - XDEBUG_MODE=coverage
 
 before_script:
   - wget http://getcomposer.org/composer.phar
   - php composer.phar install
 
-script: bin/phpunit --coverage-text
+script: bin/phpunit --coverage-text --debug
