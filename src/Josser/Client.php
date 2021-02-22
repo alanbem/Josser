@@ -20,6 +20,7 @@ use Josser\Client\Transport\TransportInterface;
 use Josser\Exception\RequestResponseMismatchException;
 use Josser\Client\Request\Request;
 use Josser\Client\Request\Notification;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
 /**
  * JSON-RPC client.
@@ -104,14 +105,14 @@ class Client
         }
 
         $requestDTO = $protocol->getRequestDataTransferObject($request);
-        $encodedRequest = $protocol->getEncoder()->encode($requestDTO, null);
+        $encodedRequest = $protocol->getEncoder()->encode($requestDTO, JsonEncoder::FORMAT);
         $encodedResponse = $transport->send($encodedRequest);
 
         if($protocol->isNotification($request)) {
             return new NoResponse();
         }
 
-        $responseDTO = $protocol->getDecoder()->decode($encodedResponse, null);
+        $responseDTO = $protocol->getDecoder()->decode($encodedResponse, JsonEncoder::FORMAT);
         $response = $protocol->createResponse($responseDTO);
 
         if(!$protocol->match($request, $response)) {
